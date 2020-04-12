@@ -42,4 +42,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/lieuDeDepart"
         android:layout_alignParentLeft="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/calcul"
+        android:text="Calculer itinéraire"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/lieuDeArrivee"
+        android:onClick="lancerCalcul"/>
 </RelativeLayout>

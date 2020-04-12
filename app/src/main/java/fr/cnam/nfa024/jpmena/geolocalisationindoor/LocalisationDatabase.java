@@ -6,6 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Salle;
+
 public class LocalisationDatabase extends SQLiteOpenHelper {
 
 
@@ -284,5 +289,70 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
         if (db==null) return null;
         String query = "SELECT _id, " + FIELD_NUMERO_SALLE + " FROM " + TABLE_SALLES + " WHERE _id <> "+idDepart+" ORDER BY _id ASC";
         return db.rawQuery(query, null);
+    }
+
+    public Salle getSalleFromID(int idSalle){
+        SQLiteDatabase db = getReadableDatabase();
+        if(db == null) return null;
+        String query = "SELECT "+FIELD_NUMERO_SALLE+ " FROM " + TABLE_SALLES + " WHERE id ="+ idSalle;
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()){
+            String nomSalle = c.getString(c.getColumnIndex(FIELD_NUMERO_SALLE));
+            Salle salle = new Salle();
+            salle.setIdSalle(idSalle);
+            salle.setNomSalle(nomSalle);
+            return salle;
+        } else {
+            return null;
+        }
+    }
+
+    public Integer getIdFromSalle(String numSalle){
+        SQLiteDatabase db = getReadableDatabase();
+        if(db == null) return null;
+        String query = "SELECT _id FROM " + TABLE_SALLES + " WHERE " +FIELD_NUMERO_SALLE + "=" + numSalle;
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()){
+            int idSalle = c.getInt(c.getColumnIndex("_id"));
+            return new Integer(idSalle);
+        } else {
+            return null;
+        }
+    }
+
+    public List<Integer> getVoisins(int idSalle){
+        SQLiteDatabase db = getReadableDatabase();
+        List<Integer> voisins = new ArrayList<Integer>();
+        if(db == null) return null;
+        String query = "SELECT "+FIELD_TO+ ","+ " FROM " + TABLE_DEPLACEMENTS + " WHERE " +FIELD_FROM+ "="+ idSalle;
+        Cursor c = db.rawQuery(query, null);
+        if (c != null)
+        {
+            do {
+                int idSalleVoisine = c.getInt(c.getColumnIndex(FIELD_TO));
+                voisins.add(new Integer(idSalleVoisine));
+            } while (c.moveToNext());
+            return voisins;
+        } else {
+            return null;
+        }
+    }
+
+    public List<Integer> getAllSalles(){
+        SQLiteDatabase db = getReadableDatabase();
+        List<Integer> idsSalles = new ArrayList<Integer>();
+        if(db == null) return null;
+        String query = "SELECT _id  FROM " + TABLE_SALLES + " ORDER BY "+ FIELD_NUMERO_SALLE + " ASC";
+        Cursor c = db.rawQuery(query, null);
+        if (c != null)
+        {
+            do {
+                int idSalle = c.getInt(c.getColumnIndex("_id"));
+                idsSalles.add(new Integer(idSalle));
+            } while (c.moveToNext());
+            return idsSalles;
+        } else {
+            return null;
+        }
     }
 }
