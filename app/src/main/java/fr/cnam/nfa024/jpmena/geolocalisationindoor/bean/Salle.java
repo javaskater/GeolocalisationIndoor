@@ -1,63 +1,72 @@
 package fr.cnam.nfa024.jpmena.geolocalisationindoor.bean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+/*
+* inspiré sz https://www.codeflow.site/fr/article/java-dijkstra
+ */
 
 public class Salle {
 
-    private List<Integer> idSallesVoisines = new LinkedList<Integer>();
-    private long idSallePred; //L'identifiant de la salle qui me précède dans l'algorithme
-    private int distanceNoeudDepart;
-    private int idSalle;
-    private String nomSalle;
-    private int couleur; //1 = white pas visité, 2 Gray visité mais pas testée, 3 Black visitée et testée
+    private String name;
 
-    public int getIdSalle() {
-        return idSalle;
+    private List<Salle> shortestPath = new LinkedList<>();
+
+    private Integer identifiant;
+
+    private Integer distance = Integer.MAX_VALUE;
+
+    Map<Salle, Mouvement> adjacentSalles = new HashMap<>();
+
+    public void addDestination(Salle destination, Mouvement mouvement) {
+        adjacentSalles.put(destination, mouvement);
     }
 
-    public void setIdSalle(int idSalle) {
-        this.idSalle = idSalle;
+    public Salle(Integer id, String name) {
+        this.name = name;
+        this.identifiant = id;
     }
 
-    public String getNomSalle() {
-        return nomSalle;
+    public String getName() {
+        return name;
     }
 
-    public void setNomSalle(String nomSalle) {
-        this.nomSalle = nomSalle;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getCouleur() {
-        return couleur;
+    public Integer getIdentifiant() {
+        return identifiant;
     }
 
-    public void setCouleur(int couleur) {
-        this.couleur = couleur;
+    public void setIdentifiant(Integer identifiant) {
+        this.identifiant = identifiant;
     }
 
-    public List<Integer> getIdSallesVoisines() {
-        return idSallesVoisines;
+    public List<Salle> getShortestPath() {
+        return shortestPath;
     }
 
-    public void setIdSallesVoisines(List<Integer> idSallesVoisines) {
-        this.idSallesVoisines = idSallesVoisines;
+    public void setShortestPath(List<Salle> shortestPath) {
+        this.shortestPath = shortestPath;
     }
 
-    public long getIdSallePred() {
-        return idSallePred;
+    public Integer getDistance() {
+        return distance;
     }
 
-    public void setIdSallePred(long idSallePred) {
-        this.idSallePred = idSallePred;
+    public void setDistance(Integer distance) {
+        this.distance = distance;
     }
 
-    public int getDistanceNoeudDepart() {
-        return distanceNoeudDepart;
+    public Map<Salle, Mouvement> getAdjacentSalles() {
+        return adjacentSalles;
     }
 
-    public void setDistanceNoeudDepart(int distanceNoeudDepart) {
-        this.distanceNoeudDepart = distanceNoeudDepart;
+    public void setAdjacentSalles(Map<Salle, Mouvement> adjacentSalles) {
+        this.adjacentSalles = adjacentSalles;
     }
 }

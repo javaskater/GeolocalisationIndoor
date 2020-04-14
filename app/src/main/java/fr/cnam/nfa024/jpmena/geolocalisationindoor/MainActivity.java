@@ -6,10 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Graph;
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.GraphDAO;
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.LocalisationDatabase;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.SearchAlgorithms;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,6 +20,11 @@ public class MainActivity extends AppCompatActivity {
     private long mIdLieuDepart;
     private Spinner mLieuArrivee;
     private long mIdLieuArrivee;
+    /* Graphe orienté des salles et des mouvements possibles entre salles
+    * prêt pour l'algorithme de Dijstra en suivant
+    * https://www.codeflow.site/fr/article/java-dijkstra
+     */
+    private Graph mGraphe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +60,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        mGraphe = GraphDAO.getInstance(this).genererGraphe();
     }
     public void lancerCalcul(View v){
-        SearchAlgorithms.getInstance().breadthFirstSearch(mDB, mIdLieuDepart);
+        /*
+        problème car retourne un Graphe !!!!
+         */
+        SearchAlgorithms.getInstance().calculateShortestPathFromSource(mGraphe, new Integer(new Long(mIdLieuDepart).intValue()));
     }
 }

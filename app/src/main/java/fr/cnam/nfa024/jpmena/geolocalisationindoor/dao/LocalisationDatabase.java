@@ -1,4 +1,4 @@
-package fr.cnam.nfa024.jpmena.geolocalisationindoor;
+package fr.cnam.nfa024.jpmena.geolocalisationindoor.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,8 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Mouvement;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Salle;
 
 public class LocalisationDatabase extends SQLiteOpenHelper {
@@ -298,9 +300,8 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()){
             String nomSalle = c.getString(c.getColumnIndex(FIELD_NUMERO_SALLE));
-            Salle salle = new Salle();
-            salle.setIdSalle(idSalle);
-            salle.setNomSalle(nomSalle);
+            Salle salle = new Salle(idSalle, nomSalle);
+            //on recherche les noeuds adjacent dans le sens cette salle vers TO
             return salle;
         } else {
             return null;
@@ -320,19 +321,22 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
         }
     }
 
-    public List<Integer> getVoisins(int idSalle){
+    public List<Mouvement> getNextElemants(int idSalle){
         SQLiteDatabase db = getReadableDatabase();
-        List<Integer> voisins = new ArrayList<Integer>();
+        List<Mouvement> suivants = new LinkedList<Mouvement>();
         if(db == null) return null;
-        String query = "SELECT "+FIELD_TO+ ","+ " FROM " + TABLE_DEPLACEMENTS + " WHERE " +FIELD_FROM+ "="+ idSalle;
+        String query = "SELECT "+FIELD_TO+ ","+FIELD_MOUVEMENT+ " FROM " + TABLE_DEPLACEMENTS + " WHERE " +FIELD_FROM+ "="+ idSalle;
         Cursor c = db.rawQuery(query, null);
         if (c != null)
         {
             do {
-                int idSalleVoisine = c.getInt(c.getColumnIndex(FIELD_TO));
-                voisins.add(new Integer(idSalleVoisine));
+                Mouvement mouvement = new Mouvement();
+                mouvement.setIdFrom(idSalle);
+                mouvement.setIdTo(c.getInt(c.getColumnIndex(FIELD_TO)));
+                mouvement.setDeplacement(c.getString(c.getColumnIndex(FIELD_MOUVEMENT)));
+                suivants.add(mouvement);
             } while (c.moveToNext());
-            return voisins;
+            return suivants;
         } else {
             return null;
         }

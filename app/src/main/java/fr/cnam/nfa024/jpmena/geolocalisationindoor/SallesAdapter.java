@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.LocalisationDatabase;
+
 public class SallesAdapter extends CursorAdapter {
 
 
