@@ -4,16 +4,24 @@ package fr.cnam.nfa024.jpmena.geolocalisationindoor;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import java.util.List;
+import java.util.Map;
+
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Graph;
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Mouvement;
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Salle;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.GraphDAO;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.LocalisationDatabase;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.SearchAlgorithms;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     private LocalisationDatabase mDB;
     private Spinner mLieuDepart;
@@ -64,6 +72,20 @@ public class MainActivity extends AppCompatActivity {
     }
     public void lancerCalcul(View v){
         mGraphe = SearchAlgorithms.getInstance().calculateShortestPathFromSource(mGraphe, new Integer(new Long(mIdLieuDepart).intValue()));
-        //* TODO afficher le chemin optimum de mIdLieuDart à mIdLieuArrivee
+        // afficher le chemin optimum de mIdLieuDart à mIdLieuArrivee
+        List<Salle> plusCourtChemin = GraphDAO.getInstance(this).retournePlusCourtChemin(new Long(mIdLieuArrivee).intValue());
+        for(int i =0; i < plusCourtChemin.size(); i++){
+            Salle salleEnCours = plusCourtChemin.get(i);
+            if (i < plusCourtChemin.size() - 1){
+                Salle sallesuivante =  plusCourtChemin.get(i+1);
+                Mouvement mouvement = null;
+                for( Salle salleAdjacente: salleEnCours.getAdjacentSalles().keySet()){
+                    if(salleAdjacente == sallesuivante){
+                        mouvement = salleEnCours.getAdjacentSalles().get(salleAdjacente);
+                        Log.i(TAG, "déplacement de :"+salleEnCours.getName()+ " à :"+sallesuivante.getName()+"en passant par:"+ mouvement.getDeplacement());
+                    }
+                }
+            }
+        }
     }
 }
