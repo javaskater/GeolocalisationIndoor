@@ -1,5 +1,7 @@
 package fr.cnam.nfa024.jpmena.geolocalisationindoor.service;
 
+import android.util.Log;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
@@ -12,6 +14,8 @@ import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Salle;
 public class SearchAlgorithms {
     private static final SearchAlgorithms ourInstance = new SearchAlgorithms();
 
+    public final static String TAG_DIJKSTRA = "DIJKSTRA_ALGORITHM";
+
     public static SearchAlgorithms getInstance() {
         return ourInstance;
     }
@@ -22,6 +26,7 @@ public class SearchAlgorithms {
     /*
     * algorithme tiré du livre OReilly
     * Algorithms in a Nutshell et de https://www.codeflow.site/fr/article/java-dijkstra
+    * ou https://www.baeldung.com/java-dijkstra
     *
      */
     public Graph calculateShortestPathFromSource(Graph graph, Integer idSource) {
@@ -30,8 +35,10 @@ public class SearchAlgorithms {
         Salle source = null;
 
         for (Salle salle : graph.getSalles()) {
-            if (salle.getIdentifiant() == idSource){
+            if (salle.getIdentifiant().intValue() == idSource.intValue()){
                 source = salle;
+                Log.i(SearchAlgorithms.TAG_DIJKSTRA, "on démarre de la salle:"+source.getName());
+                break;
             }
         }
         if (source != null) {
@@ -52,8 +59,10 @@ public class SearchAlgorithms {
                     if (!settledSalles.contains(adjacentSalle)) {
                         calculateMinimumDistance(adjacentSalle, edgeWeight, currentSalle);
                         unsettledSalles.add(adjacentSalle);
+                        Log.i(SearchAlgorithms.TAG_DIJKSTRA, "on ajoute à la queue unsettled la salle:"+adjacentSalle.getName());
                     }
                 }
+                Log.i(SearchAlgorithms.TAG_DIJKSTRA, "on a fini de traiter la salle:"+currentSalle.getName()+ " on l'ajoute à la liste settled");
                 settledSalles.add(currentSalle);
             }
         }
@@ -70,6 +79,7 @@ public class SearchAlgorithms {
                 lowestDistanceSalle = salle;
             }
         }
+        Log.i(SearchAlgorithms.TAG_DIJKSTRA, "[getLowestDistanceSalle]La salle de la queue unsettled de distance la moins grande du départ:"+ lowestDistanceSalle.getName());
         return lowestDistanceSalle;
     }
 
@@ -81,6 +91,9 @@ public class SearchAlgorithms {
             LinkedList<Salle> shortestPath = new LinkedList<>(sourceSalle.getShortestPath());
             shortestPath.add(sourceSalle);
             evaluationSalle.setShortestPath(shortestPath);
+            Log.i(SearchAlgorithms.TAG_DIJKSTRA, "[calculateMinimumDistance]La somme de :"+sourceSalle.getName()+ " avec: "+ edgeWeigh+ "est inférireure à :"+ evaluationSalle.getName());
+        } else {
+            Log.i(SearchAlgorithms.TAG_DIJKSTRA, "[calculateMinimumDistance]La somme de :"+sourceSalle.getName()+ " avec: "+ edgeWeigh+ "est supérieure à :"+ evaluationSalle.getName());
         }
     }
 

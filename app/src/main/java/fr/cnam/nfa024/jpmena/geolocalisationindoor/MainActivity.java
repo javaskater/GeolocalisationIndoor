@@ -63,9 +63,7 @@ public class MainActivity extends AppCompatActivity {
         mGraphe = GraphDAO.getInstance(this).genererGraphe();
     }
     public void lancerCalcul(View v){
-        /*
-        problème car retourne un Graphe !!!!
-         */
-        SearchAlgorithms.getInstance().calculateShortestPathFromSource(mGraphe, new Integer(new Long(mIdLieuDepart).intValue()));
+        mGraphe = SearchAlgorithms.getInstance().calculateShortestPathFromSource(mGraphe, new Integer(new Long(mIdLieuDepart).intValue()));
+        //* TODO afficher le chemin optimum de mIdLieuDart à mIdLieuArrivee
     }
 }

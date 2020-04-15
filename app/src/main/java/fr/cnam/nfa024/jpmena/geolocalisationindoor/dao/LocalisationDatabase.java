@@ -296,7 +296,7 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
     public Salle getSalleFromID(int idSalle){
         SQLiteDatabase db = getReadableDatabase();
         if(db == null) return null;
-        String query = "SELECT "+FIELD_NUMERO_SALLE+ " FROM " + TABLE_SALLES + " WHERE id ="+ idSalle;
+        String query = "SELECT "+FIELD_NUMERO_SALLE+ " FROM " + TABLE_SALLES + " WHERE _id ="+ idSalle;
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()){
             String nomSalle = c.getString(c.getColumnIndex(FIELD_NUMERO_SALLE));
@@ -329,6 +329,7 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
         if (c != null)
         {
+            c.moveToFirst(); //par défaut le curseur est à sa dernière position
             do {
                 Mouvement mouvement = new Mouvement();
                 mouvement.setIdFrom(idSalle);
@@ -350,6 +351,7 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
         if (c != null)
         {
+            c.moveToFirst(); //par défaut le curseur est à sa dernière position
             do {
                 int idSalle = c.getInt(c.getColumnIndex("_id"));
                 idsSalles.add(new Integer(idSalle));
