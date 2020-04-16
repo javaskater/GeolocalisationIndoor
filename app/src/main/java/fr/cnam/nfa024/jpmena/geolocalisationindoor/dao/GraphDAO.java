@@ -58,12 +58,22 @@ public class GraphDAO {
      * à partir de l'ID de destination on veut retrouver le chemin des salles du fichier source
      * cette méthode est à appeler une fois l'algorithme de Dijkstra passé
      */
-    public List<Salle> retournePlusCourtChemin(Integer idDestination){
-        Salle destination = this.mLocalisationDatabase.getSalleFromID(idDestination); //rechercher dans le grapde retourné par L'algorithme !!!!!
-        List<Salle> plusCourtChemin = destination.getShortestPath();
-        if(plusCourtChemin != null && plusCourtChemin.size() > 0){
-            plusCourtChemin.add(destination);
+    public List<Salle> retournePlusCourtChemin(Graph graphe, Integer idDestination){
+        Salle destination = null;
+        for (Salle salle:graphe.getSalles()){
+            if (salle.getIdentifiant() == idDestination){
+                destination = salle;
+                break;
+            }
         }
-        return plusCourtChemin;
+        if (destination != null) {
+            List<Salle> plusCourtChemin = destination.getShortestPath();
+            if (plusCourtChemin != null && plusCourtChemin.size() > 0) {
+                plusCourtChemin.add(destination);
+            }
+            return plusCourtChemin;
+        } else {
+            return null;
+        }
     }
 }

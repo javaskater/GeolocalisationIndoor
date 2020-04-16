@@ -25,3 +25,9 @@
         return plusCourtChemin;
     }
 ```
+
+# Transitions et Compass sensor data:
+
+* livre AndroidCookbook 
+  * p 222 (Transition animation) 
+  * et 227 (Creating a compass using sensor data and animation)

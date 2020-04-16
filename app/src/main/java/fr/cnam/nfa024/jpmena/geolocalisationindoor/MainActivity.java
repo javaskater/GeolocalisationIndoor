@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     public void lancerCalcul(View v){
         mGraphe = SearchAlgorithms.getInstance().calculateShortestPathFromSource(mGraphe, new Integer(new Long(mIdLieuDepart).intValue()));
         // afficher le chemin optimum de mIdLieuDart à mIdLieuArrivee
-        List<Salle> plusCourtChemin = GraphDAO.getInstance(this).retournePlusCourtChemin(new Long(mIdLieuArrivee).intValue());
+        List<Salle> plusCourtChemin = GraphDAO.getInstance(this).retournePlusCourtChemin(mGraphe, new Long(mIdLieuArrivee).intValue());
         for(int i =0; i < plusCourtChemin.size(); i++){
             Salle salleEnCours = plusCourtChemin.get(i);
             if (i < plusCourtChemin.size() - 1){
