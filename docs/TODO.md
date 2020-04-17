@@ -11,7 +11,7 @@
 # 15/04/2020
 * regarder [L'utilisation du graphe construit](https://github.com/eugenp/tutorials/blob/c15908c3d213aaea96add429361357d7d2525a66/algorithms-miscellaneous-2/src/test/java/com/baeldung/algorithms/DijkstraAlgorithmLongRunningUnitTest.java#L48)
   * et en profiter pour parcourir mon propre graphe
-  ```java
+```java
   /*
      * à partir de l'ID de destination on veut retrouver le chemin des salles du fichier source
      * cette méthode est à appeler une fois l'algorithme de Dijkstra passé
