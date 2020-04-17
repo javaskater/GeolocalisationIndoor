@@ -31,3 +31,8 @@
 * livre AndroidCookbook 
   * p 222 (Transition animation) 
   * et 227 (Creating a compass using sensor data and animation)
+  
+# 17/04/2020
+* Tester le passage de la main Activity à l'activité suivante
+* Trouver un moyen d'afficher les étapes en carousel
+* insérer la boussole dans chaque étape

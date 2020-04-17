@@ -1,6 +1,7 @@
 
 package fr.cnam.nfa024.jpmena.geolocalisationindoor;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Graph;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Mouvement;
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.PlusCourtChemin;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Salle;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.GraphDAO;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.LocalisationDatabase;
@@ -22,6 +24,7 @@ import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.SearchAlgorithms;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    public static final String CHEMINOPTIMAL = "CheminOptimal";
 
     private LocalisationDatabase mDB;
     private Spinner mLieuDepart;
@@ -73,19 +76,16 @@ public class MainActivity extends AppCompatActivity {
     public void lancerCalcul(View v){
         mGraphe = SearchAlgorithms.getInstance().calculateShortestPathFromSource(mGraphe, new Integer(new Long(mIdLieuDepart).intValue()));
         // afficher le chemin optimum de mIdLieuDart à mIdLieuArrivee
-        List<Salle> plusCourtChemin = GraphDAO.getInstance(this).retournePlusCourtChemin(mGraphe, new Long(mIdLieuArrivee).intValue());
-        for(int i =0; i < plusCourtChemin.size(); i++){
-            Salle salleEnCours = plusCourtChemin.get(i);
-            if (i < plusCourtChemin.size() - 1){
-                Salle sallesuivante =  plusCourtChemin.get(i+1);
-                Mouvement mouvement = null;
-                for( Salle salleAdjacente: salleEnCours.getAdjacentSalles().keySet()){
-                    if(salleAdjacente == sallesuivante){
-                        mouvement = salleEnCours.getAdjacentSalles().get(salleAdjacente);
-                        Log.i(TAG, "déplacement de :"+salleEnCours.getName()+ " à :"+sallesuivante.getName()+"en passant par:"+ mouvement.getDeplacement());
-                    }
-                }
-            }
+        List<Salle> listePlusCourtChemin = GraphDAO.getInstance(this).retournePlusCourtChemin(mGraphe, new Long(mIdLieuArrivee).intValue());
+        //Création de l'objet Serializable à passer à lactivité de Visualisation
+        PlusCourtChemin plusCourtChemin = new PlusCourtChemin(listePlusCourtChemin);
+        //visualisation du plus court chemin dans la console Logcat
+        for(String parcoursElement:plusCourtChemin.toStringsForLogCat()){
+            Log.i(TAG, parcoursElement);
         }
+
+        Intent intentViewCourse = new Intent(this, ViewCourseActivity.class);
+        intentViewCourse.putExtra(CHEMINOPTIMAL, plusCourtChemin);
+        startActivity(intentViewCourse);
     }
 }
