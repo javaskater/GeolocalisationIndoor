@@ -36,3 +36,9 @@
 * Tester le passage de la main Activity à l'activité suivante
 * Trouver un moyen d'afficher les étapes en carousel
 * insérer la boussole dans chaque étape
+
+# 20/04/2020
+* Dans la ViewCoursActivity récupérer du SerializableChemin le mouvement unitaire 
+et l'afficher
+* Un mouvement se compose de plusieurs étapes et chacune est à afficher avec soit la boussole 
+ou un compte pas ?

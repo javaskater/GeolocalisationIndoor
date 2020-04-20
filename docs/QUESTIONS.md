@@ -14,3 +14,10 @@
 * Comment lire un QR Code qui me retourne le numéro de la salle ?
   * faut il créer un QRCOde qui contient le numéro de salle (générateur de QRCode ?)
   * faut il passer en pas à pas pour remplacer le QRCode lu par le numéro d'une salle ?
+  
+# Questions au 20/04/2020
+
+* J'ai une MainActivity qui se contente de lancer le calcul du chemin optimal 
+entre une salle A et une salle B (chaque fois un spinner permet de sélectionner la salle)Le chemin optimal est envoyé via un Intent à une Activity ViewCourseActivvityCe chemin se compose d'une succession de salles séparées par des Mouvement (Un mouvement permet d'atteindre 2 salles voisine, un mouvement est par exemple: SUD+OUEST+MONTER+EST+NORD)Dans ViewCourseActivvity j'ai besoin d'afficher salle_i, 
+Mouvement, salle_i+1et un bouton pour passer au mouvement suivant.
+  * un mouvement (MouvementActivity ?) lui même se compose d'étapes (EtapeActivity?)

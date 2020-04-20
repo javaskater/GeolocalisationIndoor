@@ -54,4 +54,14 @@ dans le graphe orienté décrit par les tables *salles* et *deplacments*
 * Dans un premier temps les salles de départ et d'arrivée sont chacune choisies à partir d'un Spinnner
   * le spinner d'arrivée et son adaptateur reprend toutes les valeurs de la table *Salles* à l'exception 
   de la valeur sélectionnée par le spinner SAlle de départ.
-* Pour cela on reprend [cette implémentation Java](https://www.baeldung.com/java-dijkstra) de l'algorithme de Dijkstra.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+* Pour cela on reprend [cette implémentation Java](https://www.baeldung.com/java-dijkstra) de l'algorithme de Dijkstra.
+
+# passage de l'action principale à l'action de visualisation
+
+* Les objets **Salle** et **Mouvement**  ayant trop de références croisées  leur serialisation 
+n'est pas possible. Je suis donc passé en objets simplifiés **SerializableSalle** et **SerilizableMouvement** de
+même que **SerializableParcours** 
+  * La verification que le parcours s'est bien transmis se fait via LogCat en se limitant au messages de la classe
+  *info* avec un filtre portant sur *ViewCourseActivity*
+* la grande question qui se pose est comment produire une visualisation des déplacements
+ * demmarer une 3ème activité qui affichera une boussole et une étape du parcours ?                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        

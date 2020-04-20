@@ -2,11 +2,15 @@ package fr.cnam.nfa024.jpmena.geolocalisationindoor.bean;
 
 import java.io.Serializable;
 
-public class Mouvement {
+/*
+* L'objet Mouvement étant trop intriqué avec
+* l'objet Salle la serialisation du plus court chmein ne passe pas
+* l'Intent
+ */
+
+public class SerializableMouvement implements Serializable {
     private Integer idFrom; //idenntifiant de la salle de départ
-    private Salle salleFrom; // salle de départ
     private Integer idTo; //identifiant de la salle d'arrivee
-    private Salle salleTo; // la salle d'arrivee
     private String deplacement; //description du déplacement
 
     public Integer getIdFrom() {
@@ -17,28 +21,12 @@ public class Mouvement {
         this.idFrom = idFrom;
     }
 
-    public Salle getSalleFrom() {
-        return salleFrom;
-    }
-
-    public void setSalleFrom(Salle salleFrom) {
-        this.salleFrom = salleFrom;
-    }
-
     public Integer getIdTo() {
         return idTo;
     }
 
     public void setIdTo(Integer idTo) {
         this.idTo = idTo;
-    }
-
-    public Salle getSalleTo() {
-        return salleTo;
-    }
-
-    public void setSalleTo(Salle salleTo) {
-        this.salleTo = salleTo;
     }
 
     public String getDeplacement() {

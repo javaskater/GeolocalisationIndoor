@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Graph;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Mouvement;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.PlusCourtChemin;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Salle;
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializablePlusCourtChemin;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.GraphDAO;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.LocalisationDatabase;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.SearchAlgorithms;
@@ -83,9 +85,13 @@ public class MainActivity extends AppCompatActivity {
         for(String parcoursElement:plusCourtChemin.toStringsForLogCat()){
             Log.i(TAG, parcoursElement);
         }
-
+        /*
+        * passage par un objet simplifié de parcours optimal
+        * but c'est qu'il soit Serializable
+         */
+        SerializablePlusCourtChemin serializablePlusCourtChemin = plusCourtChemin.prepareSerialisation();
         Intent intentViewCourse = new Intent(this, ViewCourseActivity.class);
-        intentViewCourse.putExtra(CHEMINOPTIMAL, plusCourtChemin);
+        intentViewCourse.putExtra(CHEMINOPTIMAL, serializablePlusCourtChemin);
         startActivity(intentViewCourse);
     }
 }

@@ -1,7 +1,5 @@
 package fr.cnam.nfa024.jpmena.geolocalisationindoor.bean;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,7 +8,7 @@ import java.util.Map;
 * inspiré sz https://www.codeflow.site/fr/article/java-dijkstra
  */
 
-public class Salle implements Serializable {
+public class Salle {
 
     private String name;
 
