@@ -1,5 +1,6 @@
 package fr.cnam.nfa024.jpmena.geolocalisationindoor;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializableSalle;
 public class ViewCourseActivity extends AppCompatActivity {
 
     private static String TAG = "ViewCourseActivity";
+    public static String ETAPE = "Etape";
     private SerializablePlusCourtChemin mPlusCourtChemin;
     private LinearLayout mMainLinearLayout;
     private Integer mNumeroEatapeRealise;
@@ -49,7 +51,7 @@ public class ViewCourseActivity extends AppCompatActivity {
 
     private void addLine(Integer indiceEtape) {
         if (indiceEtape < mPlusCourtChemin.getNombreEtapes()) {
-            HashMap<String, Object> etape = mPlusCourtChemin.extractEtape(indiceEtape);
+            final HashMap<String, Object> etape = mPlusCourtChemin.extractEtape(indiceEtape);
             //On ajoute un LinearLayout avec une orientation HORIZONTALE
             LinearLayout textLinearLayout = new LinearLayout(this);
             textLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -70,7 +72,7 @@ public class ViewCourseActivity extends AppCompatActivity {
 
             Button button = new Button(this);
             button.setText("Go Etape "+(indiceEtape+1));
-            button.setId(indiceEtape);
+            ///button.setId(indiceEtape);
             setButtonAttributes(button);
             //cf réponse 29 dans https://stackoverflow.com/questions/10673628/implementing-onclicklistener-for-dynamically-created-buttons-in-android
             final int index = indiceEtape;
@@ -79,6 +81,9 @@ public class ViewCourseActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Button b = (Button)v;
                     Toast.makeText(ViewCourseActivity.this, "etape :"+ (index + 1) + " sélectionnée", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(ViewCourseActivity.this,EtapeActivity.class);
+                    intent.putExtra(ETAPE, etape);
+                    startActivity(intent);
                 }
             });
             textLinearLayout.addView(button);
