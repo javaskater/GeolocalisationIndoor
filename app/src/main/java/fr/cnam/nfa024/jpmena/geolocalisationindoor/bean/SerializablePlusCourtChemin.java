@@ -2,6 +2,7 @@ package fr.cnam.nfa024.jpmena.geolocalisationindoor.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 /*
  * L'objet Mouvement étant trop intriqué avec
@@ -10,6 +11,10 @@ import java.util.List;
  */
 
 public class SerializablePlusCourtChemin implements Serializable {
+
+    public static final String FROM = "From";
+    public static final String TO = "Ro";
+    public static final String BY= "By";
 
     private List<SerializableSalle> mSalles = new ArrayList<SerializableSalle>();
     private List<SerializableMouvement> mMouvements = new ArrayList<SerializableMouvement>();
@@ -48,5 +53,26 @@ public class SerializablePlusCourtChemin implements Serializable {
         }
         return liste;
     }
-    // TODO ajouter un accèsEtape i:
+    /*
+    * Accès Etape i
+    * pour afficchage des Etapes
+     une à une dans la vue */
+    public HashMap<String, Object> extractEtape(Integer indiceEtapeDansChemin){
+        if (indiceEtapeDansChemin < this.getmMouvements().size()){
+            SerializableMouvement serializableMouvement = this.getmMouvements().get(indiceEtapeDansChemin);
+            SerializableSalle salleFrom = findSalle(serializableMouvement.getIdFrom());
+            SerializableSalle salleTo = findSalle(serializableMouvement.getIdTo());
+            HashMap<String, Object> extraction = new HashMap<String, Object>();
+            extraction.put(FROM,salleFrom);
+            extraction.put(TO,salleTo);
+            extraction.put(BY,serializableMouvement);
+            return extraction;
+        }
+        return null;
+    }
+
+    public int getNombreEtapes(){
+        return this.getmMouvements().size();
+    }
+
 }
