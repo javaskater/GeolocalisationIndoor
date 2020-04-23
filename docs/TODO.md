@@ -42,3 +42,10 @@
 et l'afficher
 * Un mouvement se compose de plusieurs étapes et chacune est à afficher avec soit la boussole 
 ou un compte pas ?
+
+# 23/04/2020
+
+* vue detail Mouvement doit maintenant soit afficher une boussole si le Mouvement est NORD, SUD, EST, OUEST
+* soit afficher un escalier avec une flèche si le mouvement est monter ou descendre
+* voir le livre Packt CookBook pour la boussole
+* voir le cours du professeur 2018-2019 pour le Canvas

@@ -65,3 +65,23 @@ même que **SerializableParcours**
   *info* avec un filtre portant sur *ViewCourseActivity*
 * la grande question qui se pose est comment produire une visualisation des déplacements
  * demmarer une 3ème activité qui affichera une boussole et une étape du parcours ?                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+# Passage de l'action de visualisation du pacours à l'étape de visualisation d'une étape
+
+* La visualisation du pacours affiche une liste 'étape avec un Go après chacune d'entre elles
+  * ce qui nous renvoie à EtapeActivity
+* Pour chaque étape on a:
+  * soit un mouvement simple représenté par un direction à suivre
+  * soit un changement d'étage représenté par un ensemble de directions à prendre séparéee par une action de montée ou de descente
+    * l'ensemble de directions à suivre permet soir de se rendre à la cage d'escalier
+    * soit de quitter la cage d'escalier pour rejoindre la salle la plus proche
+# Passage de l'action de parcours de l'étape à l'affichage des mouvements 
+ * comme pour la visualisation des étapes nous allons ici visualiser les mouvements
+   * un bouton détail premettra d'accéder soit à la boussole (cf. chapitre ci dessous)
+   * soit à un podomètre lors d'un changement de niveau 
+    
+## la visualistation d'une direction à suivre!
+
+* Elle se fait en affichant une boussole comme montré dans le [livre PAckt Android Cookbook developement][https://www.packtpub.com/application-development/android-application-development-cookbook-second-edition]
+  * page 230 (ou 249/428)
+ 
