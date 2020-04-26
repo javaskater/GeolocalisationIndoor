@@ -14,7 +14,7 @@
         android:id="@+id/boutonConfirmation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="FAIT/OK"/>
+        android:text="FAIT/OK" />
     <ImageView
         android:id="@+id/imageViewCompass"
         android:layout_width="wrap_content"

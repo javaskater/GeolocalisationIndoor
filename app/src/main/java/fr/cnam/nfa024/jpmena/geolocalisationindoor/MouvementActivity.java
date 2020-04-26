@@ -7,8 +7,10 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 
 public class MouvementActivity extends AppCompatActivity {
@@ -25,6 +27,14 @@ public class MouvementActivity extends AppCompatActivity {
     private float[] mAccelerationValues=new float[3];
     private float[] mRotationMatrix=new float[9];
     private float mLastDirectionInDegrees = 0f;
+
+    private Button mOkFait;
+
+    public static final String NORD = "NORD";
+    public static final String SUD = "SUD";
+    public static final String EST = "EST";
+    public static final String OUEST = "OUEST";
+
 
     private SensorEventListener mSensorListener = new SensorEventListener() {
         @Override
@@ -50,10 +60,32 @@ public class MouvementActivity extends AppCompatActivity {
         } else {
             setTitle("se diriger vers le "+ deplacement);
             setContentView(R.layout.activity_mouvement_boussole);
-            mImageViewCompass = findViewById(R.id.imageViewCompass);
+            mImageViewCompass = (ImageView) findViewById(R.id.imageViewCompass);
+            /*
+            * On affiche une image différente suivant la direction que l'on veut prendre comme suggéré
+            * sur https://stackoverflow.com/questions/61425687/adding-a-circle-on-an-imagei-n-android/61425779#61425779
+            * Cette image reprend celle trouvée sur https://pixabay.com/en/geography-map-compass-rose-plot-42608/
+            * on lui a rajouté par Gimp une flèche en jaune vers la direction souhaitée
+             */
+            if(deplacement.equalsIgnoreCase(NORD)){
+                mImageViewCompass.setImageResource(R.drawable.compassn);
+            } else if (deplacement.equalsIgnoreCase(SUD)){
+                mImageViewCompass.setImageResource(R.drawable.compasss);
+            } else if (deplacement.equalsIgnoreCase(EST)) {
+                mImageViewCompass.setImageResource(R.drawable.compasse);
+            } else if (deplacement.equalsIgnoreCase(OUEST)) {
+                mImageViewCompass.setImageResource(R.drawable.compasso);
+            }
             mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
             mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
             mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            mOkFait = (Button) findViewById(R.id.boutonConfirmation);
+            mOkFait.setOnClickListener(new Button.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                        MouvementActivity.this.finish();
+                }
+            });
         }
     }
 
@@ -95,4 +127,5 @@ public class MouvementActivity extends AppCompatActivity {
             mLastDirectionInDegrees = azimuth;
         }
     }
+
 }

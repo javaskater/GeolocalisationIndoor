@@ -49,3 +49,10 @@ ou un compte pas ?
 * soit afficher un escalier avec une flèche si le mouvement est monter ou descendre
 * voir le livre Packt CookBook pour la boussole
 * voir le cours du professeur 2018-2019 pour le Canvas
+
+# 26/04/2020
+
+* pour monter ou descendre trouver une image d'escalier montant et une image d'escalier descendant
+* Trouver s'il est possible de compter les pas ?
+* retrouver sur 2018-2019 le TP d'appel d'un visualisateur de QRCodes
+* QRCodes, trouver un générateur de QRCodes

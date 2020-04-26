@@ -83,5 +83,11 @@ même que **SerializableParcours**
 ## la visualistation d'une direction à suivre!
 
 * Elle se fait en affichant une boussole comme montré dans le [livre PAckt Android Cookbook developement][https://www.packtpub.com/application-development/android-application-development-cookbook-second-edition]
-  * page 230 (ou 249/428)
+  * page 230 (ou 249/428). On part d'une [image de boussole](https://pixabay.com/en/geography-map-compass-rose-plot-42608/)
+  
+* Pour ajouter une flèche indiquant la direction réelle à suivre on affiche suivant la direction
+  * une image différente sur laquelle la direction souhaitée a été visualisée par une flèche 
+  jaune ajoutée avec GIMP sur [l'image de base de bossole](https://pixabay.com/en/geography-map-compass-rose-plot-42608/)
+  * ceci m'a été suggéré sur [StackOverflow](https://stackoverflow.com/questions/61425687/adding-a-circle-on-an-imagei-n-android/61425779#61425779)
+  en réponse à ma question... 
  
