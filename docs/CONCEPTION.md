@@ -91,3 +91,13 @@ même que **SerializableParcours**
   * ceci m'a été suggéré sur [StackOverflow](https://stackoverflow.com/questions/61425687/adding-a-circle-on-an-imagei-n-android/61425779#61425779)
   en réponse à ma question... 
  
+## compter les pas quand on monte ou descend d'un escalier
+
+### Plusieurs références:
+* une video qui explique comment utiliser l'acceleromètre [video](https://programmerworld.co/android/how-to-create-walking-step-counter-app-using-accelerometer-sensor-and-shared-preference-in-android/)
+  * inconvenient, il ne prend pas en compte les faux positifs, il se base juste sur la norme
+  * avantage: il garde en mémoire physique via les shared preferences la dernière valeur du nombre de pas.
+* un [lien](https://montemagno.com/part-1-my-stepcounter-android-step-sensors/) qui explique comment utiliser directement le STEP DETECTOR
+  * problème ce n'est pas en java mais dans un langage très proche *.cs*
+  * je n'ai que des morceaux de code et pas le code intégral qui est sur GitHub
+* utiliser le StepCounter comme indiqué sur [PAcktPub AndroidSensor Programming](https://hub.packtpub.com/step-detector-and-step-counters-sensors/)

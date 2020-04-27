@@ -27,6 +27,7 @@ public class MouvementActivity extends AppCompatActivity {
     private float[] mAccelerationValues=new float[3];
     private float[] mRotationMatrix=new float[9];
     private float mLastDirectionInDegrees = 0f;
+    private String mDeplacement;
 
     private Button mOkFait;
 
@@ -53,12 +54,19 @@ public class MouvementActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mouvement_boussole);
         Bundle bundle = getIntent().getExtras();
-        String deplacement = bundle.getString(EtapeActivity.MOUVEMENT);
-        if(deplacement.equalsIgnoreCase("MONTER") || deplacement.equalsIgnoreCase("DESCENDRE")) {
-            setTitle(deplacement+" d'un niveau");
+        mDeplacement = bundle.getString(EtapeActivity.MOUVEMENT);
+        if(mDeplacement.equalsIgnoreCase("MONTER") || mDeplacement.equalsIgnoreCase("DESCENDRE")) {
+            setTitle(mDeplacement+" d'un niveau");
             setContentView(R.layout.activity_mouvement_etage);
+            ImageView imageView = (ImageView) findViewById(R.id.imageViewStairs);
+            if (mDeplacement.equalsIgnoreCase("MONTER")){
+                imageView.setImageResource(R.drawable.manclimbingstair);
+            }else {
+                //on descend
+                imageView.setImageResource(R.drawable.mandescendingstair);
+            }
         } else {
-            setTitle("se diriger vers le "+ deplacement);
+            setTitle("se diriger vers le "+ mDeplacement);
             setContentView(R.layout.activity_mouvement_boussole);
             mImageViewCompass = (ImageView) findViewById(R.id.imageViewCompass);
             /*
@@ -67,39 +75,44 @@ public class MouvementActivity extends AppCompatActivity {
             * Cette image reprend celle trouvée sur https://pixabay.com/en/geography-map-compass-rose-plot-42608/
             * on lui a rajouté par Gimp une flèche en jaune vers la direction souhaitée
              */
-            if(deplacement.equalsIgnoreCase(NORD)){
+            if(mDeplacement.equalsIgnoreCase(NORD)){
                 mImageViewCompass.setImageResource(R.drawable.compassn);
-            } else if (deplacement.equalsIgnoreCase(SUD)){
+            } else if (mDeplacement.equalsIgnoreCase(SUD)){
                 mImageViewCompass.setImageResource(R.drawable.compasss);
-            } else if (deplacement.equalsIgnoreCase(EST)) {
+            } else if (mDeplacement.equalsIgnoreCase(EST)) {
                 mImageViewCompass.setImageResource(R.drawable.compasse);
-            } else if (deplacement.equalsIgnoreCase(OUEST)) {
+            } else if (mDeplacement.equalsIgnoreCase(OUEST)) {
                 mImageViewCompass.setImageResource(R.drawable.compasso);
             }
             mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
             mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
             mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            mOkFait = (Button) findViewById(R.id.boutonConfirmation);
-            mOkFait.setOnClickListener(new Button.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                        MouvementActivity.this.finish();
-                }
-            });
         }
+        // bouton pour revenir à la présentation des étapes
+        mOkFait = (Button) findViewById(R.id.boutonConfirmation);
+        mOkFait.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                MouvementActivity.this.finish();
+            }
+        });
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        mSensorManager.registerListener(mSensorListener, mAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
-        mSensorManager.registerListener(mSensorListener, mMagnetometer, SensorManager.SENSOR_DELAY_FASTEST);
+        if (!(mDeplacement.equalsIgnoreCase("MONTER") || mDeplacement.equalsIgnoreCase("DESCENDRE"))) {
+            mSensorManager.registerListener(mSensorListener, mAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
+            mSensorManager.registerListener(mSensorListener, mMagnetometer, SensorManager.SENSOR_DELAY_FASTEST);
+        }
     }
 
     @Override
     public void onPause(){
         super.onPause();
-        mSensorManager.unregisterListener(mSensorListener);
+        if (!(mDeplacement.equalsIgnoreCase("MONTER") || mDeplacement.equalsIgnoreCase("DESCENDRE"))) {
+            mSensorManager.unregisterListener(mSensorListener);
+        }
     }
 
     private void calculateCompassDirection(SensorEvent event){
