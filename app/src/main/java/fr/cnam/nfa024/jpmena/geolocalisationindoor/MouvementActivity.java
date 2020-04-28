@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MouvementActivity extends AppCompatActivity {
 
@@ -27,7 +28,10 @@ public class MouvementActivity extends AppCompatActivity {
     private float[] mAccelerationValues=new float[3];
     private float[] mRotationMatrix=new float[9];
     private float mLastDirectionInDegrees = 0f;
-    private String mDeplacement;
+    private Sensor mStepCounter;
+    private int mNombrePas = 0; //nombre de pas de ce Déplacement unitaire
+    private String mDeplacement; //TODO A remplacer par un POJO qui inclue le nombre de pas ...
+    private TextView mCompteurPas;
 
     private Button mOkFait;
 
@@ -48,11 +52,26 @@ public class MouvementActivity extends AppCompatActivity {
         }
     };
 
+    private SensorEventListener mSensorStepsListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+
+
+            mNombrePas ++;
+            mCompteurPas.setText("nombre de pas realisés:" + String.valueOf(mNombrePas));
+        }
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            //Nothing to do
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mouvement_boussole);
+        //setContentView(R.layout.activity_mouvement_boussole);
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Bundle bundle = getIntent().getExtras();
         mDeplacement = bundle.getString(EtapeActivity.MOUVEMENT);
         if(mDeplacement.equalsIgnoreCase("MONTER") || mDeplacement.equalsIgnoreCase("DESCENDRE")) {
@@ -65,6 +84,9 @@ public class MouvementActivity extends AppCompatActivity {
                 //on descend
                 imageView.setImageResource(R.drawable.mandescendingstair);
             }
+            mCompteurPas = findViewById(R.id.compteurPas);
+            mStepCounter = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+
         } else {
             setTitle("se diriger vers le "+ mDeplacement);
             setContentView(R.layout.activity_mouvement_boussole);
@@ -84,7 +106,6 @@ public class MouvementActivity extends AppCompatActivity {
             } else if (mDeplacement.equalsIgnoreCase(OUEST)) {
                 mImageViewCompass.setImageResource(R.drawable.compasso);
             }
-            mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
             mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
             mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         }
@@ -104,6 +125,8 @@ public class MouvementActivity extends AppCompatActivity {
         if (!(mDeplacement.equalsIgnoreCase("MONTER") || mDeplacement.equalsIgnoreCase("DESCENDRE"))) {
             mSensorManager.registerListener(mSensorListener, mAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
             mSensorManager.registerListener(mSensorListener, mMagnetometer, SensorManager.SENSOR_DELAY_FASTEST);
+        } else {
+            mSensorManager.registerListener(mSensorStepsListener,mStepCounter, SensorManager.SENSOR_DELAY_UI);
         }
     }
 
@@ -112,6 +135,8 @@ public class MouvementActivity extends AppCompatActivity {
         super.onPause();
         if (!(mDeplacement.equalsIgnoreCase("MONTER") || mDeplacement.equalsIgnoreCase("DESCENDRE"))) {
             mSensorManager.unregisterListener(mSensorListener);
+        }else{
+            mSensorManager.unregisterListener(mSensorStepsListener);
         }
     }
 

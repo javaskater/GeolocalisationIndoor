@@ -9,12 +9,21 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="fr.cnam.nfa024.jpmena.geolocalisationindoor.MouvementActivity">
-
-    <Button
-        android:id="@+id/boutonConfirmation"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="FAIT/OK" />
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/boutonConfirmation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FAIT/OK" />
+
+        <TextView
+            android:id="@+id/compteurPas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
     <ImageView
         android:id="@+id/imageViewStairs"
         android:layout_width="wrap_content"

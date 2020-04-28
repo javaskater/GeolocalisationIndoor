@@ -82,16 +82,16 @@ même que **SerializableParcours**
     
 ## la visualistation d'une direction à suivre!
 
-* Elle se fait en affichant une boussole comme montré dans le [livre PAckt Android Cookbook developement][https://www.packtpub.com/application-development/android-application-development-cookbook-second-edition]
+* Elle se fait en affichant une boussole comme montré dans le [livre PAckt Android Cookbook developement](https://www.packtpub.com/application-development/android-application-development-cookbook-second-edition)
   * page 230 (ou 249/428). On part d'une [image de boussole](https://pixabay.com/en/geography-map-compass-rose-plot-42608/)
   
 * Pour ajouter une flèche indiquant la direction réelle à suivre on affiche suivant la direction
   * une image différente sur laquelle la direction souhaitée a été visualisée par une flèche 
-  jaune ajoutée avec GIMP sur [l'image de base de bossole](https://pixabay.com/en/geography-map-compass-rose-plot-42608/)
+  jaune ajoutée avec GIMP sur [l'image de base de boussole](https://pixabay.com/en/geography-map-compass-rose-plot-42608/)
   * ceci m'a été suggéré sur [StackOverflow](https://stackoverflow.com/questions/61425687/adding-a-circle-on-an-imagei-n-android/61425779#61425779)
   en réponse à ma question... 
  
-## compter les pas quand on monte ou descend d'un escalier
+## compter les pas quand on monte ou descend un escalier
 
 ### Plusieurs références:
 * une video qui explique comment utiliser l'acceleromètre [video](https://programmerworld.co/android/how-to-create-walking-step-counter-app-using-accelerometer-sensor-and-shared-preference-in-android/)
@@ -101,3 +101,27 @@ même que **SerializableParcours**
   * problème ce n'est pas en java mais dans un langage très proche *.cs*
   * je n'ai que des morceaux de code et pas le code intégral qui est sur GitHub
 * utiliser le StepCounter comme indiqué sur [PAcktPub AndroidSensor Programming](https://hub.packtpub.com/step-detector-and-step-counters-sensors/)
+## j'ai utilisé le Step Detector
+* hier 27/04/2020 il ne passait jamais dans la méthode _onSensorChangedonSensorChanged_ du listener.
+* Aujourd'hui j'ai changé le délai de prise en compte de SENSOR_DELAY_NORMAL vers SENSOR_DELAY_UI
+* le nombre de pas est pris en charge avec un peu de reatard
+```java
+mSensorManager.registerListener(mSensorStepsListener,mStepCounter, SensorManager.SENSOR_DELAY_UI);
+```
+* faire cohabiter le comptage de pas en arrière plan 
+avec la mise à jour de l'interface n'est ce pas risqué ?
+```java
+private SensorEventListener mSensorStepsListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+
+
+            mNombrePas ++;
+            mCompteurPas.setText("nombre de pas realisés:" + String.valueOf(mNombrePas));
+        }
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            //Nothing to do
+        }
+    };
+```
