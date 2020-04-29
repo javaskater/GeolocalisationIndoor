@@ -56,3 +56,11 @@ ou un compte pas ?
 * Trouver s'il est possible de compter les pas ?
 * retrouver sur 2018-2019 le TP d'appel d'un visualisateur de QRCodes
 * QRCodes, trouver un générateur de QRCodes
+
+# 29/04/2020
+
+## passer à la phase suivante du projet
+
+* mettre les plans de bâtiment au format JSON sur Firebase.
+* sélectionner un des plans présents
+* Téléchager le plan et le mettre dans la base SQLite ...

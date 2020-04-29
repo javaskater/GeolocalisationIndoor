@@ -125,3 +125,59 @@ private SensorEventListener mSensorStepsListener = new SensorEventListener() {
         }
     };
 ```
+
+# QRCodes
+
+## Leur génération:
+
+* LA salle de départ peut être choisie avec le Spinner ou en scannant un QRCode
+  * Pour génréer un QRCODE j'ai utilisé [Ce générateur web](https://www.the-qrcode-generator.com/)
+  * j'ai 2 images de QRCode
+    * la salle et valeur 31.1.01
+    * la salle et valeur 31.3.02
+  * Leurs images sont sous docs...
+  
+## Leur lecture
+
+* Je réutilise [le TP chef d'Orchestre (Exercice 2 ED 4)](http://jeanferdysusini.free.fr/Cours/CP48/index_2019.php)
+* Comme dans le TP du chef d'Orchestre je reprends le [scanner zxing](https://github.com/zxing/zxing) avec le code d'appel suivant:
+```java
+Intent photoIntent  = new Intent("com.google.zxing.client.android.SCAN");
+PackageManager pm = getPackageManager();
+List<ResolveInfo> listeActivites = pm.queryIntentActivities(photoIntent,0);
+if(listeActivites.size() > 0){
+    startActivityForResult(photoIntent, Util.REQUEST_SCANNER);
+}else{
+    Toast.makeText(this, "l'application BarCode Scanner doit être installée", Toast.LENGTH_SHORT).show();
+}
+```
+* Dans lm mainActivity, il y a aussi la méthode _onActivityResult_
+```java
+public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    switch (requestCode) {
+        case Util.REQUEST_PHOTO_CODE: {
+            if (resultCode == RESULT_OK) {
+                this.photo = (Bitmap) data.getExtras().get("data");
+                ImageView photo_iv = findViewById(R.id.picture_iv);
+                photo_iv.setImageBitmap(this.photo);
+            }
+        }
+        break;
+        case Util.REQUEST_SCANNER: {
+            if (resultCode == RESULT_OK) {
+                this.messageScanner= (String) data.getExtras().get("SCAN_RESULT");
+                TextView scan_tv = (TextView)findViewById(R.id.scan_tv);
+                scan_tv.setText(this.messageScanner);
+            }
+        }
+        break;
+    }
+}
+```
+* Je dois donc installer [Barcode Scanner by Zxing sur google Play](https://play.google.com/store/apps/details?id=com.google.zxing.client.android):
+
+## ce que j'en fais:
+* une fois le QrCode lu dans le onActivityResult
+* Je cherche l'indice dans le spinner de départ, indice correspondant au numéro de salle retourné pas le scanner
+* une fois cet indice retourné je mets le spinner de départ à la position trouvée
+* je mets à jour le spinner d'arrivée des salles en exculant la salle trouvée par le scanner
