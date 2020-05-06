@@ -181,3 +181,17 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 * Je cherche l'indice dans le spinner de départ, indice correspondant au numéro de salle retourné pas le scanner
 * une fois cet indice retourné je mets le spinner de départ à la position trouvée
 * je mets à jour le spinner d'arrivée des salles en exculant la salle trouvée par le scanner
+
+# récupération du projet Firebase
+
+* il a fallu rendre public la Override Methode (par défaut protected)
+```java
+@Override
+    public void onPostExecute(JSONObject jsonObject) {
+
+        delegate.processFinish(jsonObject);
+    }
+```
+* Pour qu'elle soit bien lancée...
+
+* TODO mettre le fireBAseDAO en attribut !! afin de pouvoir l'appeler pour insérer ...

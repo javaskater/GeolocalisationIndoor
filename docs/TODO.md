@@ -64,3 +64,14 @@ ou un compte pas ?
 * mettre les plans de bâtiment au format JSON sur Firebase.
 * sélectionner un des plans présents
 * Téléchager le plan et le mettre dans la base SQLite ...
+
+# 06/05/2020
+
+* toute l'initialisation de l'interface du MainActivity doit être faite dans le *InitDatabase.java* dans le
+```java
+new AsyncResponse() {
+                    @Override
+                    public void processFinish(JSONObject jsonObject) {
+                        JSONArray sallesArray = null;
+```
+* Sinon les Spinner plantent (car les curseurs n'ont aucun élément!

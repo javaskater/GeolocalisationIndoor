@@ -28,12 +28,15 @@ import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Salle;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializablePlusCourtChemin;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.GraphDAO;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.LocalisationDatabase;
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.InitDatabase;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.SearchAlgorithms;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     public static final String CHEMINOPTIMAL = "CheminOptimal";
+
+    private static final String URLFIREBASE = "https://geolocalisation-indoor.firebaseio.com/buildingmaps/cnamacces31.json";
 
     /*
     * pour l'appel au QRCode scanner
@@ -47,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
     private long mIdLieuArrivee;
     private Button mScanner; //le bouton qui lance le scanner de QRCode
     private String mSalleScannee; //le resultat du scan de QRCode
+
+    //le service qui intilise la base de données à partir des données récupérées d'une base Firebase
+    private InitDatabase initDatabase;
     /* Graphe orienté des salles et des mouvements possibles entre salles
     * prêt pour l'algorithme de Dijstra en suivant
     * https://www.codeflow.site/fr/article/java-dijkstra
@@ -57,6 +63,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ///initiliser les données en base à partir de Firebase
+        //TODO problème il recharge les donnée à chaque fois que onCreate est appelé typiqurment quand on passe du mode
+        //portrait au mode paiysage
+        initDatabase = new InitDatabase(this);
+        initDatabase.viderBase();
+        initDatabase.chargerDonneesEnBase(URLFIREBASE);
+
         mDB = new LocalisationDatabase(this);
         mLieuDepart = (Spinner) findViewById(R.id.lieuDeDepart);
         mLieuArrivee = (Spinner) findViewById(R.id.lieuDeArrivee);

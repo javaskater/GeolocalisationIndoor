@@ -18,10 +18,10 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "GeolocalisationCNAM.db";
 
-    private static final String TABLE_SALLES = "salles";
+    public static final String TABLE_SALLES = "salles";
     public static final String FIELD_NUMERO_SALLE = "numero_salle";
 
-    private static final String TABLE_DEPLACEMENTS = "deplacements";
+    public static final String TABLE_DEPLACEMENTS = "deplacements";
     private static final String FIELD_FROM = "de";
     private static final String FIELD_TO = "a";
     private static final String FIELD_MOUVEMENT = "mouvement";
@@ -39,7 +39,7 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE "+TABLE_SALLES+" ( _id integer PRIMARY KEY," +
                 FIELD_NUMERO_SALLE + " TEXT);");
-        ContentValues values = new ContentValues();
+        /*ContentValues values = new ContentValues();
         values.put("_id", 1);
         values.put(FIELD_NUMERO_SALLE, "31.1.01");
         long result = db.insertOrThrow(TABLE_SALLES, null, values);
@@ -75,10 +75,10 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
         result = db.insertOrThrow(TABLE_SALLES, null, values);
         values.put("_id", 12);
         values.put(FIELD_NUMERO_SALLE, "31.3.04");
-        result = db.insertOrThrow(TABLE_SALLES, null, values);
+        result = db.insertOrThrow(TABLE_SALLES, null, values);*/
         db.execSQL("CREATE TABLE "+TABLE_DEPLACEMENTS+" ( _id integer PRIMARY KEY," +
                 FIELD_FROM + " integer, "+ FIELD_TO +" integer, "+ FIELD_MOUVEMENT +" TEXT );");
-        values = new ContentValues();
+        /*values = new ContentValues();
         values.put(FIELD_FROM,1);
         values.put(FIELD_TO,2);
         values.put(FIELD_MOUVEMENT, "SUD");
@@ -271,7 +271,7 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
         values.put(FIELD_FROM,8);
         values.put(FIELD_TO,12);
         values.put(FIELD_MOUVEMENT, "NORD+EST+MONTER+OUEST+SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
+        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);*/
     }
 
     @Override
@@ -360,5 +360,29 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
         } else {
             return null;
         }
+    }
+
+    public Integer viderTable(String nomTable){
+        SQLiteDatabase db = getWritableDatabase();
+        return db.delete(nomTable, null, null);
+    }
+
+    public long insererSalle(Integer id, String numeroSalle){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("_id", id);
+        values.put(FIELD_NUMERO_SALLE, numeroSalle);
+        long result = db.insertOrThrow(TABLE_SALLES, null, values);
+        return result;
+    }
+
+    public long insererMouvement(Integer from, Integer to, String mouvement){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(FIELD_FROM,from);
+        values.put(FIELD_TO,to);
+        values.put(FIELD_MOUVEMENT, mouvement);
+        long result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
+        return result;
     }
 }
