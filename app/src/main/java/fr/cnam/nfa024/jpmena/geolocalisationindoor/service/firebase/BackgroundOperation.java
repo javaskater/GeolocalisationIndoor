@@ -2,6 +2,7 @@ package fr.cnam.nfa024.jpmena.geolocalisationindoor.service.firebase;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Spinner;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,10 +18,14 @@ public class BackgroundOperation extends AsyncTask<String, Void, JSONObject> {
     public static final String TAG = "AsyncFireBase";
 
     private AsyncResponse delegate;
+    private Spinner mLieuDepart;
+    private Spinner mLieuArrivee;
 
-    public BackgroundOperation(AsyncResponse delegate){
+    public BackgroundOperation(AsyncResponse delegate, Spinner lieuDepart, Spinner lieuArrivee){
 
         this.delegate = delegate;
+        this.mLieuDepart = lieuDepart;
+        this.mLieuArrivee = lieuArrivee;
     }
 
     @Override
@@ -66,7 +71,7 @@ public class BackgroundOperation extends AsyncTask<String, Void, JSONObject> {
     @Override
     public void onPostExecute(JSONObject jsonObject) {
 
-        delegate.processFinish(jsonObject);
+        delegate.processFinish(jsonObject, mLieuDepart, mLieuArrivee);
     }
 
     @Override

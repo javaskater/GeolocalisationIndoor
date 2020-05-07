@@ -5,30 +5,25 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Graph;
-import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Mouvement;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.PlusCourtChemin;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Salle;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializablePlusCourtChemin;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.GraphDAO;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.LocalisationDatabase;
-import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.InitDatabase;
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.InitDatabaseAndScreen;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.SearchAlgorithms;
 
 public class MainActivity extends AppCompatActivity {
@@ -52,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private String mSalleScannee; //le resultat du scan de QRCode
 
     //le service qui intilise la base de données à partir des données récupérées d'une base Firebase
-    private InitDatabase initDatabase;
+    private InitDatabaseAndScreen initDatabaseAndScreen;
     /* Graphe orienté des salles et des mouvements possibles entre salles
     * prêt pour l'algorithme de Dijstra en suivant
     * https://www.codeflow.site/fr/article/java-dijkstra
@@ -66,41 +61,11 @@ public class MainActivity extends AppCompatActivity {
         ///initiliser les données en base à partir de Firebase
         //TODO problème il recharge les donnée à chaque fois que onCreate est appelé typiqurment quand on passe du mode
         //portrait au mode paiysage
-        initDatabase = new InitDatabase(this);
-        initDatabase.viderBase();
-        initDatabase.chargerDonneesEnBase(URLFIREBASE);
-
-        mDB = new LocalisationDatabase(this);
         mLieuDepart = (Spinner) findViewById(R.id.lieuDeDepart);
         mLieuArrivee = (Spinner) findViewById(R.id.lieuDeArrivee);
-        Cursor lieuxDepart = mDB.getLieuxDepartList();
-        mLieuDepart.setAdapter(new SallesAdapter(this, lieuxDepart, 0));
-        mLieuDepart.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //Toast.makeText(MainActivity.this, "position:"+ position+ " et id:"+id, Toast.LENGTH_LONG).show();
-                mIdLieuDepart = id;
-                Cursor lieuxArrivee = mDB.getLieuxArriveeList(id);
-                mLieuArrivee.setAdapter(new SallesAdapter(MainActivity.this, lieuxArrivee, 0));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        mLieuArrivee.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mIdLieuArrivee = id;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        mGraphe = GraphDAO.getInstance(this).genererGraphe();
+        initDatabaseAndScreen = new InitDatabaseAndScreen(this);
+        initDatabaseAndScreen.viderBase();
+        initDatabaseAndScreen.chargerDonneesEnBase(URLFIREBASE, mLieuDepart, mLieuArrivee);
 
         mScanner = (Button)findViewById(R.id.scanQrCode);
         mScanner.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void lancerCalcul(View v){
+        mGraphe = GraphDAO.getInstance(this).genererGraphe();
+        mIdLieuDepart = initDatabaseAndScreen.getIdLieuDepart();
+        mIdLieuArrivee = initDatabaseAndScreen.getIdLieuArrivee();
         mGraphe = SearchAlgorithms.getInstance().calculateShortestPathFromSource(mGraphe, new Integer(new Long(mIdLieuDepart).intValue()));
         // afficher le chemin optimum de mIdLieuDart à mIdLieuArrivee
         List<Salle> listePlusCourtChemin = GraphDAO.getInstance(this).retournePlusCourtChemin(mGraphe, new Long(mIdLieuArrivee).intValue());

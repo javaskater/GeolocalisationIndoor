@@ -1,6 +1,7 @@
 package fr.cnam.nfa024.jpmena.geolocalisationindoor.dao;
 
 import android.content.Context;
+import android.database.Cursor;
 
 public class FireBaseDAO {
 
@@ -31,5 +32,13 @@ public class FireBaseDAO {
 
     public long insererMouvement(Integer from, Integer to, String mouvement){
         return this.mLocalisationDatabase.insererMouvement(from, to, mouvement);
+    }
+
+    public Cursor getLieuxDepartList(){
+        return this.mLocalisationDatabase.getLieuxDepartList();
+    }
+
+    public Cursor getLieuxArriveeList(long idDepart){
+        return this.mLocalisationDatabase.getLieuxArriveeList(idDepart);
     }
 }
