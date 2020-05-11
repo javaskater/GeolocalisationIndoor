@@ -88,7 +88,7 @@ public class InitDatabaseAndScreen {
                         lieuDepart.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                //Toast.makeText(MainActivity.this, "position:"+ position+ " et id:"+id, Toast.LENGTH_LONG).show();
+                                //Toast.makeText(SallesActivity.this, "position:"+ position+ " et id:"+id, Toast.LENGTH_LONG).show();
                                 mIdLieuDepart = id;
                                 Cursor lieuxArrivee = mFireBaseDAO.getLieuxArriveeList(id);
                                 lieuArrivee.setAdapter(new SallesAdapter(InitDatabaseAndScreen.this.mContext, lieuxArrivee, 0));

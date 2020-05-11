@@ -16,6 +16,8 @@
         <activity
             android:name=".ViewCourseActivity"
             android:label="@string/title_activity_view_course" />
+        <activity android:name=".SallesActivity"
+            android:label="choix des salles de départ et d'arrivée" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -43,7 +43,7 @@ public class PlusCourtChemin implements Serializable {
 
     /*
     * PlusCourtChemin n'est pas sérializable j'ai doncc besoin ici de simplifier
-    * le chemin optimal que l'on va passer à l'intent de MainActivity
+    * le chemin optimal que l'on va passer à l'intent de SallesActivity
      */
 
     public SerializablePlusCourtChemin prepareSerialisation(){

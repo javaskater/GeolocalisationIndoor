@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 
-import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.PlusCourtChemin;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializablePlusCourtChemin;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializableSalle;
 
@@ -31,9 +30,9 @@ public class ViewCourseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_course);
-        //On récupère le chemin Optimal de la MainActivity
+        //On récupère le chemin Optimal de la SallesActivity
         Bundle bundle = getIntent().getExtras();
-        mPlusCourtChemin = (SerializablePlusCourtChemin) bundle.getSerializable(MainActivity.CHEMINOPTIMAL);
+        mPlusCourtChemin = (SerializablePlusCourtChemin) bundle.getSerializable(SallesActivity.CHEMINOPTIMAL);
         //visualisation du plus court chemin dans la console Logcat
         for(String parcoursElement:mPlusCourtChemin.toLogcat()){
             Log.i(TAG, parcoursElement);
