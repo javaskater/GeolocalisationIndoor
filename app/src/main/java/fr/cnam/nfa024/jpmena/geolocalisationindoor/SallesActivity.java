@@ -23,6 +23,7 @@ import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializablePlusCourtChe
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.GraphDAO;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.LocalisationDatabase;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.InitDatabaseAndScreen;
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.ParcoursOptimalService;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.SearchAlgorithms;
 
 public class SallesActivity extends AppCompatActivity {
@@ -30,7 +31,13 @@ public class SallesActivity extends AppCompatActivity {
     private static final String TAG = "SallesActivity";
     public static final String CHEMINOPTIMAL = "CheminOptimal";
 
-    private static final String URLFIREBASE = "https://geolocalisation-indoor.firebaseio.com/buildingmaps/cnamacces31.json";
+    public static final String IDLIEUDEPART = "IdLieuDepart";
+    public static final String  IDLIEUARRIVEE = "IdLieuArrivee";
+
+    /*
+    * TODO on acède à buildinmaps on complète avec cnamAccess31 ou cnamacccess32 .json
+     */
+    private static final String URLFIREBASE = "https://geolocalisation-indoor.firebaseio.com/buildingmaps/";
 
     /*
     * pour l'appel au QRCode scanner
@@ -57,6 +64,8 @@ public class SallesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salles);
+        Bundle bundle = getIntent().getExtras();
+        String batiment = bundle.getString(MainActivity.BATIMENT);
         ///initiliser les données en base à partir de Firebase
         //TODO problème il recharge les donnée à chaque fois que onCreate est appelé typiqurment quand on passe du mode
         //portrait au mode paiysage
@@ -64,7 +73,7 @@ public class SallesActivity extends AppCompatActivity {
         mLieuArrivee = (Spinner) findViewById(R.id.lieuDeArrivee);
         initDatabaseAndScreen = new InitDatabaseAndScreen(this);
         initDatabaseAndScreen.viderBase();
-        initDatabaseAndScreen.chargerDonneesEnBase(URLFIREBASE, mLieuDepart, mLieuArrivee);
+        initDatabaseAndScreen.chargerDonneesEnBase(URLFIREBASE+batiment+".json", mLieuDepart, mLieuArrivee);
 
         mScanner = (Button)findViewById(R.id.scanQrCode);
         mScanner.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +92,7 @@ public class SallesActivity extends AppCompatActivity {
         });
     }
     public void lancerCalcul(View v){
-        mGraphe = GraphDAO.getInstance(this).genererGraphe();
+        /*mGraphe = GraphDAO.getInstance(this).genererGraphe();
         mIdLieuDepart = initDatabaseAndScreen.getIdLieuDepart();
         mIdLieuArrivee = initDatabaseAndScreen.getIdLieuArrivee();
         mGraphe = SearchAlgorithms.getInstance().calculateShortestPathFromSource(mGraphe, new Integer(new Long(mIdLieuDepart).intValue()));
@@ -94,15 +103,27 @@ public class SallesActivity extends AppCompatActivity {
         //visualisation du plus court chemin dans la console Logcat
         for(String parcoursElement:plusCourtChemin.toStringsForLogCat()){
             Log.i(TAG, parcoursElement);
-        }
+        }*/
         /*
         * passage par un objet simplifié de parcours optimal
         * but c'est qu'il soit Serializable
          */
-        SerializablePlusCourtChemin serializablePlusCourtChemin = plusCourtChemin.prepareSerialisation();
+        /*SerializablePlusCourtChemin serializablePlusCourtChemin = plusCourtChemin.prepareSerialisation();
         Intent intentViewCourse = new Intent(this, ViewCourseActivity.class);
         intentViewCourse.putExtra(CHEMINOPTIMAL, serializablePlusCourtChemin);
-        startActivity(intentViewCourse);
+        startActivity(intentViewCourse);*/
+        //Finalement on décide de consacrer un service au calcul du parcours
+        mIdLieuDepart = initDatabaseAndScreen.getIdLieuDepart();
+        mIdLieuArrivee = initDatabaseAndScreen.getIdLieuArrivee();
+
+        //on lance un service pour claculer le parcours optimal
+        Intent i = new Intent(SallesActivity.this, ParcoursOptimalService.class);
+
+        i.putExtra(IDLIEUDEPART, new Long(mIdLieuDepart));
+        i.putExtra(IDLIEUARRIVEE, new Long(mIdLieuArrivee));
+
+        startService(i);
+
     }
 
     @Override

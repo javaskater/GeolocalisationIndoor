@@ -61,7 +61,7 @@ public class GraphDAO {
     public List<Salle> retournePlusCourtChemin(Graph graphe, Integer idDestination){
         Salle destination = null;
         for (Salle salle:graphe.getSalles()){
-            if (salle.getIdentifiant() == idDestination){
+            if (salle.getIdentifiant().intValue() == idDestination.intValue()){
                 destination = salle;
                 break;
             }

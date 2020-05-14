@@ -75,3 +75,14 @@ new AsyncResponse() {
                         JSONArray sallesArray = null;
 ```
 * Sinon les Spinner plantent (car les curseurs n'ont aucun élément!
+
+# 14/05/2020
+
+* Passage d'un calcul dans le SallesAction.java à un appel à un service de Parcours Optimal!!!
+```
+IntentService[ParcoursOptimalService]
+    Process: fr.cnam.nfa024.jpmena.geolocalisationindoor, PID: 21659
+    android.util.AndroidRuntimeException: Calling startActivity() from outside of an Activity  context 
+    requires the FLAG_ACTIVITY_NEW_TASK flag. Is this really what you want?
+```
+* Faut il passer par une notification ?

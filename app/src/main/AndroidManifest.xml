@@ -11,13 +11,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MouvementActivity"></activity>
+        <service
+            android:name=".service.ParcoursOptimalService"
+            android:exported="false"></service>
+
+        <activity android:name=".MouvementActivity" />
         <activity android:name=".EtapeActivity" />
         <activity
             android:name=".ViewCourseActivity"
             android:label="@string/title_activity_view_course" />
-        <activity android:name=".SallesActivity"
-            android:label="choix des salles de départ et d'arrivée" />
+        <activity
+            android:name=".SallesActivity"
+            android:label="choix des salles de départ et d&apos;arrivée" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -202,4 +202,10 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
  
 * j'ai trouvé [Cet exemple sur Openclassrooms](https://openclassrooms.com/fr/courses/2023346-creez-des-applications-pour-android/2027704-les-services#/id/r-2033531)
   * peut être trop compliqué ?
-  * je suis arrivé à [ici](https://openclassrooms.com/fr/courses/2023346-creez-des-applications-pour-android/2027704-les-services#/id/r-2033609) 
+  * je suis arrivé à [ici](https://openclassrooms.com/fr/courses/2023346-creez-des-applications-pour-android/2027704-les-services#/id/r-2033609)
+  * faire une nouvelle application avec [le code suivant](https://openclassrooms.com/fr/courses/2023346-creez-des-applications-pour-android/2027704-les-services#/id/r-2033602)
+  
+## SallesActivity.java / Lancer calcul
+
+* Il faut remplacer cette fonction par un appel à Service cf. [service Simple](https://openclassrooms.com/fr/courses/2023346-creez-des-applications-pour-android/2027704-les-services#/id/r-2033529)
+  * le OnHandleIntent s'exécute en arrière plan !!!
