@@ -1,6 +1,9 @@
 package fr.cnam.nfa024.jpmena.geolocalisationindoor.service;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.Context;
 import android.util.Log;
@@ -8,6 +11,7 @@ import android.view.View;
 
 import java.util.List;
 
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.R;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.SallesActivity;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.ViewCourseActivity;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Graph;
@@ -29,6 +33,8 @@ public class ParcoursOptimalService extends IntentService {
 
     public final static String CHEMINOPTIMAL = "CheminOptimal";
 
+    private NotificationManager mNotificationsManager;
+
     public ParcoursOptimalService() {
         super("ParcoursOptimalService");
     }
@@ -37,14 +43,39 @@ public class ParcoursOptimalService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {//methode appelée en arrière plan
         if (intent != null) {
+
+            mNotificationsManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
             long idLieuDepart = (Long)intent.getLongExtra(SallesActivity.IDLIEUDEPART, -1);
             long idLieuArrrivee = (Long)intent.getLongExtra(SallesActivity.IDLIEUARRIVEE, -1);
 
             SerializablePlusCourtChemin serializablePlusCourtChemin = lancerCalcul(idLieuDepart, idLieuArrrivee);
-            //TODO Ajouter une notification une fois ce chemin calculé
+            //création d'une notification cf. https://stackoverflow.com/questions/32345768/cannot-resolve-method-setlatesteventinfo
+            int icon = R.drawable.ic_action_map;
+            // Le premier titre affiché
+            CharSequence tickerText = "Parcours disponible";
+
             Intent intentViewCourse = new Intent(this, ViewCourseActivity.class);
+            intentViewCourse.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //Pour lui permettre de démarrer une activité
             intentViewCourse.putExtra(CHEMINOPTIMAL, serializablePlusCourtChemin);
-            startActivity(intentViewCourse);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this,0, intentViewCourse, 0);
+
+            Notification.Builder builder = new Notification.Builder(this);
+
+            builder.setAutoCancel(false);
+            builder.setTicker(tickerText);
+            builder.setContentTitle("Parcours");
+            builder.setContentText("Le Pacours est disponible");
+            builder.setSmallIcon(R.drawable.ic_action_map);
+            builder.setContentIntent(pendingIntent);
+            builder.setOngoing(true);
+            builder.setSubText("Accédez au pacrous en cliquant sur cette icône");   //API level 16
+            builder.setNumber(100);
+            builder.build();
+
+            Notification notification = builder.getNotification();
+            mNotificationsManager.notify(11, notification);
+
         }
     }
 

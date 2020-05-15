@@ -209,3 +209,6 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 * Il faut remplacer cette fonction par un appel à Service cf. [service Simple](https://openclassrooms.com/fr/courses/2023346-creez-des-applications-pour-android/2027704-les-services#/id/r-2033529)
   * le OnHandleIntent s'exécute en arrière plan !!!
+* Le service lance une notification une fois le parcours prêt cf [cours OpenClassRomm](https://openclassrooms.com/fr/courses/2023346-creez-des-applications-pour-android/2027704-les-services#/id/r-2033587)
+  * Il utilise des méthodes deprecated donc on prèfère [la réponse 84 à ce post StackOverflow](https://stackoverflow.com/questions/32345768/cannot-resolve-method-setlatesteventinfo)
+* le 15/052020 à 18:35 tout marche sauf que l'on ne voit pas de petit icon sur la barre de notification 

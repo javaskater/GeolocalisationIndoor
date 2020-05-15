@@ -86,3 +86,9 @@ IntentService[ParcoursOptimalService]
     requires the FLAG_ACTIVITY_NEW_TASK flag. Is this really what you want?
 ```
 * Faut il passer par une notification ?
+
+# 15/05/2020
+
+* Notification OK [cf. ce lien](https://openclassrooms.com/fr/courses/2023346-creez-des-applications-pour-android/2027704-les-services#/id/r-2033586) complété par [ce post StackOverflow](https://stackoverflow.com/questions/32345768/cannot-resolve-method-setlatesteventinfo)
+* TODO problème l'icone de Map ne s'affiche que quand on ouvre la barre de notification....
+* TODO avoir une icône sur la barre ...
