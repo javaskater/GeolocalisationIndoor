@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Salle;
 
 public class LocalisationDatabase extends SQLiteOpenHelper {
 
+    private static final String TAG = "LocalisationDatabase";
 
     private static final String DATABASE_NAME = "GeolocalisationCNAM.db";
 
@@ -27,8 +29,10 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
     private static final String FIELD_MOUVEMENT = "mouvement";
 
 
+    private static final String FIELD_ACCESSIBLE = "accessible";
 
-    private static final int DATABASE_VERSION = 1;
+
+    private static final int DATABASE_VERSION = 2;
 
     public LocalisationDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,245 +41,25 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.i(TAG, "On lance la création de la table "+TABLE_SALLES);
         db.execSQL("CREATE TABLE "+TABLE_SALLES+" ( _id integer PRIMARY KEY," +
                 FIELD_NUMERO_SALLE + " TEXT);");
-        /*ContentValues values = new ContentValues();
-        values.put("_id", 1);
-        values.put(FIELD_NUMERO_SALLE, "31.1.01");
-        long result = db.insertOrThrow(TABLE_SALLES, null, values);
-        values.put("_id", 2);
-        values.put(FIELD_NUMERO_SALLE, "31.1.02");
-        result = db.insertOrThrow(TABLE_SALLES, null, values);
-        values.put("_id", 3);
-        values.put(FIELD_NUMERO_SALLE, "31.1.03");
-        result = db.insertOrThrow(TABLE_SALLES, null, values);
-        values.put("_id", 4);
-        values.put(FIELD_NUMERO_SALLE, "31.1.04");
-        result = db.insertOrThrow(TABLE_SALLES, null, values);
-        values.put("_id", 5);
-        values.put(FIELD_NUMERO_SALLE, "31.2.01");
-        result = db.insertOrThrow(TABLE_SALLES, null, values);
-        values.put("_id", 6);
-        values.put(FIELD_NUMERO_SALLE, "31.2.02");
-        result = db.insertOrThrow(TABLE_SALLES, null, values);
-        values.put("_id", 7);
-        values.put(FIELD_NUMERO_SALLE, "31.2.03");
-        result = db.insertOrThrow(TABLE_SALLES, null, values);
-        values.put("_id", 8);
-        values.put(FIELD_NUMERO_SALLE, "31.2.04");
-        result = db.insertOrThrow(TABLE_SALLES, null, values);
-        values.put("_id", 9);
-        values.put(FIELD_NUMERO_SALLE, "31.3.01");
-        result = db.insertOrThrow(TABLE_SALLES, null, values);
-        values.put("_id", 10);
-        values.put(FIELD_NUMERO_SALLE, "31.3.02");
-        result = db.insertOrThrow(TABLE_SALLES, null, values);
-        values.put("_id", 11);
-        values.put(FIELD_NUMERO_SALLE, "31.3.03");
-        result = db.insertOrThrow(TABLE_SALLES, null, values);
-        values.put("_id", 12);
-        values.put(FIELD_NUMERO_SALLE, "31.3.04");
-        result = db.insertOrThrow(TABLE_SALLES, null, values);*/
+        Log.i(TAG, "On lance la création de la table "+TABLE_DEPLACEMENTS);
         db.execSQL("CREATE TABLE "+TABLE_DEPLACEMENTS+" ( _id integer PRIMARY KEY," +
                 FIELD_FROM + " integer, "+ FIELD_TO +" integer, "+ FIELD_MOUVEMENT +" TEXT );");
-        /*values = new ContentValues();
-        values.put(FIELD_FROM,1);
-        values.put(FIELD_TO,2);
-        values.put(FIELD_MOUVEMENT, "SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,2);
-        values.put(FIELD_TO,1);
-        values.put(FIELD_MOUVEMENT, "NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,1);
-        values.put(FIELD_TO,3);
-        values.put(FIELD_MOUVEMENT, "EST");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,3);
-        values.put(FIELD_TO,1);
-        values.put(FIELD_MOUVEMENT, "OUEST");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,3);
-        values.put(FIELD_TO,4);
-        values.put(FIELD_MOUVEMENT, "SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,4);
-        values.put(FIELD_TO,3);
-        values.put(FIELD_MOUVEMENT, "NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,2);
-        values.put(FIELD_TO,4);
-        values.put(FIELD_MOUVEMENT, "EST");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,4);
-        values.put(FIELD_TO,2);
-        values.put(FIELD_MOUVEMENT, "OUEST");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,3);
-        values.put(FIELD_TO,7);
-        values.put(FIELD_MOUVEMENT, "EST+MONTER+OUEST+NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,7);
-        values.put(FIELD_TO,3);
-        values.put(FIELD_MOUVEMENT, "EST+DESCENDRE+OUEST+NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,4);
-        values.put(FIELD_TO,8);
-        values.put(FIELD_MOUVEMENT, "EST+MONTER+OUEST+SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,8);
-        values.put(FIELD_TO,4);
-        values.put(FIELD_MOUVEMENT, "EST+DESCENDRE+OUEST+SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,1);
-        values.put(FIELD_TO,5);
-        values.put(FIELD_MOUVEMENT, "OUEST+MONTER+EST+NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,5);
-        values.put(FIELD_TO,1);
-        values.put(FIELD_MOUVEMENT, "OUEST+DESCENDRE+EST+NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,2);
-        values.put(FIELD_TO,6);
-        values.put(FIELD_MOUVEMENT, "OUEST+MONTER+EST+SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,6);
-        values.put(FIELD_TO,2);
-        values.put(FIELD_MOUVEMENT, "OUEST+DESCENDRE+EST+SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,5);
-        values.put(FIELD_TO,6);
-        values.put(FIELD_MOUVEMENT, "SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,6);
-        values.put(FIELD_TO,5);
-        values.put(FIELD_MOUVEMENT, "NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,5);
-        values.put(FIELD_TO,7);
-        values.put(FIELD_MOUVEMENT, "EST");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,7);
-        values.put(FIELD_TO,5);
-        values.put(FIELD_MOUVEMENT, "OUEST");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,6);
-        values.put(FIELD_TO,8);
-        values.put(FIELD_MOUVEMENT, "EST");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,8);
-        values.put(FIELD_TO,6);
-        values.put(FIELD_MOUVEMENT, "OUEST");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,5);
-        values.put(FIELD_TO,9);
-        values.put(FIELD_MOUVEMENT, "SUD+OUEST+MONTER+EST+NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,5);
-        values.put(FIELD_TO,10);
-        values.put(FIELD_MOUVEMENT, "SUD+OUEST+MONTER+EST+SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,9);
-        values.put(FIELD_TO,5);
-        values.put(FIELD_MOUVEMENT, "SUD+OUEST+DESCENDRE+NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,10);
-        values.put(FIELD_TO,5);
-        values.put(FIELD_MOUVEMENT, "NORD+OUEST+DESCENDRE+NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-
-        values.put(FIELD_FROM,6);
-        values.put(FIELD_TO,9);
-        values.put(FIELD_MOUVEMENT, "NORD+OUEST+MONTER+EST+NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,6);
-        values.put(FIELD_TO,10);
-        values.put(FIELD_MOUVEMENT, "NORD+OUEST+MONTER+EST+SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,9);
-        values.put(FIELD_TO,6);
-        values.put(FIELD_MOUVEMENT, "SUD+OUEST+DESCENDRE+SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,10);
-        values.put(FIELD_TO,6);
-        values.put(FIELD_MOUVEMENT, "NORD+OUEST+DESCENDRE+SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-
-        values.put(FIELD_FROM,9);
-        values.put(FIELD_TO,10);
-        values.put(FIELD_MOUVEMENT, "SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,10);
-        values.put(FIELD_TO,9);
-        values.put(FIELD_MOUVEMENT, "NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-
-        values.put(FIELD_FROM,9);
-        values.put(FIELD_TO,11);
-        values.put(FIELD_MOUVEMENT, "EST");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,11);
-        values.put(FIELD_TO,9);
-        values.put(FIELD_MOUVEMENT, "OUEST");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-
-        values.put(FIELD_FROM,10);
-        values.put(FIELD_TO,12);
-        values.put(FIELD_MOUVEMENT, "EST");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,12);
-        values.put(FIELD_TO,10);
-        values.put(FIELD_MOUVEMENT, "OUEST");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-
-        values.put(FIELD_FROM,12);
-        values.put(FIELD_TO,11);
-        values.put(FIELD_MOUVEMENT, "NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,11);
-        values.put(FIELD_TO,12);
-        values.put(FIELD_MOUVEMENT, "SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-
-        values.put(FIELD_FROM,11);
-        values.put(FIELD_TO,7);
-        values.put(FIELD_MOUVEMENT, "SUD+EST+DESCENDRE+OUEST+NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,7);
-        values.put(FIELD_TO,11);
-        values.put(FIELD_MOUVEMENT, "SUD+EST+MONTER+OUEST+NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-
-        values.put(FIELD_FROM,12);
-        values.put(FIELD_TO,7);
-        values.put(FIELD_MOUVEMENT, "NORD+EST+DESCENDRE+OUEST+NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,7);
-        values.put(FIELD_TO,12);
-        values.put(FIELD_MOUVEMENT, "SUD+EST+MONTER+OUEST+SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-
-        values.put(FIELD_FROM,11);
-        values.put(FIELD_TO,8);
-        values.put(FIELD_MOUVEMENT, "SUD+EST+DESCENDRE+OUEST+SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,8);
-        values.put(FIELD_TO,11);
-        values.put(FIELD_MOUVEMENT, "NORD+EST+MONTER+OUEST+NORD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-
-        values.put(FIELD_FROM,12);
-        values.put(FIELD_TO,8);
-        values.put(FIELD_MOUVEMENT, "NORD+EST+DESCENDRE+OUEST+SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
-        values.put(FIELD_FROM,8);
-        values.put(FIELD_TO,12);
-        values.put(FIELD_MOUVEMENT, "NORD+EST+MONTER+OUEST+SUD");
-        result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);*/
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.i(TAG, "Ancienne version:: "+ oldVersion+ " version actuelle "+ newVersion);
+        //cf. https://thebhwgroup.com/blog/how-android-sqlite-onupgrade
+        if (oldVersion < 2) {
+            Log.i(TAG, "On lance les mises à jour des tables "+TABLE_SALLES+ " et "+TABLE_DEPLACEMENTS);
+            db.execSQL("ALTER TABLE "
+                    + TABLE_SALLES + " ADD COLUMN " + FIELD_ACCESSIBLE + " INTEGER DEFAULT 1;");
+            db.execSQL("ALTER TABLE "
+                    + TABLE_DEPLACEMENTS + " ADD COLUMN " + FIELD_ACCESSIBLE + " INTEGER DEFAULT 1;");
+        }
 
     }
 

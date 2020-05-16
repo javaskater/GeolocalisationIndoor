@@ -5,9 +5,10 @@
 
 ## la table Salles:
  * Elle modélise les noeuds de mon graphe.
- * Elle est composée de 2 champs:
+ * Elle est composée de 3 champs:
    * un champs **_id** qui est un entier et contitue la clé primaire
    * un champs **numero_salle** qui est une chaine de caractères reprenant le numéro de la salle telle que affiché sur la porte et que l'on devra retrouver sur le QRCode
+   * un champs accessible qui est un booléen indiquant si la salle est disponible ou non (condamnée travaux ou autres)
    * On entre 12 salles, 4 salles par niveau, 2 salles de chaque côté du couloir
  * Ci dessous un extrait du code Java de création des ssalles. on s'est arrêté à la création de la première salle
 ```java
@@ -34,6 +35,8 @@ On entend par voisines 2 salle séparées par un déplacement élémentaire.
     * par exemple **EST+MONTER+OUEST+NORD** signifie aller à l'est jusqu'à rencontrer un escalier, monter cet escalier
     allez à l'oust jsuqu'à rencontrer une salle puis aller vers le nord jusqu'à rencontrer la salle qui nous intéresse.
     Ce déplacement à un poids de 4 car 4 indications
+  * le champs **accessible** est un champs de type Booléen qui indique si cette portion du parccours est ouverte ou non
+    * (Sens de circulation cause COVID, travaux, plan vigipirate)
 * Ci dessous un extrait de code java qui crée la table *deplacements* et y insère une première ligne
   * on va de las alle 31.1.01 (id 1) à la salle 31.1.02 (id: 2) en se diriggeant vers le sud. Une seule indication
   Ce déplacement a donc un moids de 1.   
@@ -211,4 +214,30 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
   * le OnHandleIntent s'exécute en arrière plan !!!
 * Le service lance une notification une fois le parcours prêt cf [cours OpenClassRomm](https://openclassrooms.com/fr/courses/2023346-creez-des-applications-pour-android/2027704-les-services#/id/r-2033587)
   * Il utilise des méthodes deprecated donc on prèfère [la réponse 84 à ce post StackOverflow](https://stackoverflow.com/questions/32345768/cannot-resolve-method-setlatesteventinfo)
-* le 15/052020 à 18:35 tout marche sauf que l'on ne voit pas de petit icon sur la barre de notification 
+* le 15/052020 à 18:35 tout marche sauf que l'on ne voit pas de petit icon sur la barre de notification
+
+# prise en compte des travaux, de Vigipirate et de sens de circulatioin (COVID)
+
+* Sur Firebase, on a ajouté *acccessible* 
+  * aux salles (pas en travaux)
+  * aux éléments de parcours (travaux, de Vigipirate et de sens de circulatioin (COVID))
+  
+## réperccuter sur la base de données:
+
+### partie structure de la BDD 
+
+* on a [les bonnes pratiques de la mise à jour BDD](https://thebhwgroup.com/blog/how-android-sqlite-onupgrade)
+* c'est plutôt *private static final int DATABASE_VERSION = 2;* utilisé au contructeur de notre base LocalisationDatabase
+  * ne sert à rien : on passe l'application en version 2 c'est dans le defaultconfig de *app/build.gradle* l'entrée *versionCode*
+* On récupère la base de données en tapant *adb shell* et l'on va vers
+  * */data/data/fr.cnam.nfa024.jpmena.geolocalisationindoor/databases*
+```bash
+root@generic_x86:/data/data/fr.cnam.nfa024.jpmena.geolocalisationindoor/databases # ll
+-rw-rw---- u0_a60   u0_a60      20480 2020-05-16 12:57 GeolocalisationCNAM.db
+-rw------- u0_a60   u0_a60       8720 2020-05-16 12:57 GeolocalisationCNAM.db-journal
+```
+* je récupère en local cette base pouur vérifier que la colonnne a été ajoutée
+```bash
+jpmena@jpmena-P34:~/AndroidStudioProjects/GeolocalisationIndoor$ adb pull /data/data/fr.cnam.nfa024.jpmena.geolocalisationindoor/databases/GeolocalisationCNAM.db .
+/data/data/fr.cnam.nfa024.jpmena.geolocalisationindoor/databases/GeolocalisationCNAM.db: 1 file pulled. 3.6 MB/s (20480 bytes in 0.005s)
+```
