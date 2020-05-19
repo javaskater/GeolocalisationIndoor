@@ -23,12 +23,13 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
     public static final String TABLE_SALLES = "salles";
     public static final String FIELD_NUMERO_SALLE = "numero_salle";
 
+
     public static final String TABLE_DEPLACEMENTS = "deplacements";
     private static final String FIELD_FROM = "de";
     private static final String FIELD_TO = "a";
     private static final String FIELD_MOUVEMENT = "mouvement";
 
-
+    //commun à la table Salle et à la table Mouvement
     private static final String FIELD_ACCESSIBLE = "accessible";
 
 
@@ -43,12 +44,13 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.i(TAG, "On lance la création de la table "+TABLE_SALLES);
         db.execSQL("CREATE TABLE "+TABLE_SALLES+" ( _id integer PRIMARY KEY," +
-                FIELD_NUMERO_SALLE + " TEXT);");
+                FIELD_NUMERO_SALLE + " TEXT,"+FIELD_ACCESSIBLE+" INTEGER DEFAULT 1);");
         Log.i(TAG, "On lance la création de la table "+TABLE_DEPLACEMENTS);
         db.execSQL("CREATE TABLE "+TABLE_DEPLACEMENTS+" ( _id integer PRIMARY KEY," +
-                FIELD_FROM + " integer, "+ FIELD_TO +" integer, "+ FIELD_MOUVEMENT +" TEXT );");
+                FIELD_FROM + " integer, "+ FIELD_TO +" integer, "+ FIELD_MOUVEMENT +" TEXT, "+FIELD_ACCESSIBLE+" INTEGER DEFAULT 1);");
     }
 
+    //ne fonctionne pas
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i(TAG, "Ancienne version:: "+ oldVersion+ " version actuelle "+ newVersion);
@@ -151,21 +153,35 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
         return db.delete(nomTable, null, null);
     }
 
-    public long insererSalle(Integer id, String numeroSalle){
+    public long insererSalle(Integer id, String numeroSalle, Boolean accessible){
+        Integer iAccessible = new Integer(1);
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("_id", id);
         values.put(FIELD_NUMERO_SALLE, numeroSalle);
+        if(accessible.booleanValue()){
+            iAccessible = new Integer(1);
+        } else {
+            iAccessible = new Integer(0);
+        }
+        values.put(FIELD_ACCESSIBLE, iAccessible);
         long result = db.insertOrThrow(TABLE_SALLES, null, values);
         return result;
     }
 
-    public long insererMouvement(Integer from, Integer to, String mouvement){
+    public long insererMouvement(Integer from, Integer to, String mouvement, Boolean accessible){
+        Integer iAccessible = new Integer(1);
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(FIELD_FROM,from);
         values.put(FIELD_TO,to);
         values.put(FIELD_MOUVEMENT, mouvement);
+        if(accessible.booleanValue()){
+            iAccessible = new Integer(1);
+        } else {
+            iAccessible = new Integer(0);
+        }
+        values.put(FIELD_ACCESSIBLE, iAccessible);
         long result = db.insertOrThrow(TABLE_DEPLACEMENTS, null, values);
         return result;
     }

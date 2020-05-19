@@ -17,9 +17,12 @@ public class SerializableSalle implements Serializable {
 
     private Integer identifiant;
 
+    //private Boolean accessible; //La salle est elle ouverte oou bien en travaux ?
+
     public SerializableSalle(Integer id, String name) {
         this.name = name;
         this.identifiant = id;
+        //this.accessible = accessible;
     }
 
     public String getName() {
@@ -38,7 +41,11 @@ public class SerializableSalle implements Serializable {
         this.identifiant = identifiant;
     }
 
+    /*public Boolean getAccessible() {
+        return accessible;
+    }
 
-
-
+    public void setAccessible(Boolean accessible) {
+        this.accessible = accessible;
+    }*/
 }

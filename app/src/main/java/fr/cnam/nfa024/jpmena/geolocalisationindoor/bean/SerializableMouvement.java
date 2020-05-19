@@ -12,6 +12,7 @@ public class SerializableMouvement implements Serializable {
     private Integer idFrom; //idenntifiant de la salle de départ
     private Integer idTo; //identifiant de la salle d'arrivee
     private String deplacement; //description du déplacement
+    //private Boolean accessible; //dit si le déplacment est possible ou non en raison de travaux, Vigipirate COVID19
 
     public Integer getIdFrom() {
         return idFrom;
@@ -36,6 +37,14 @@ public class SerializableMouvement implements Serializable {
     public void setDeplacement(String deplacement) {
         this.deplacement = deplacement;
     }
+
+    /*public Boolean getAccessible() {
+        return accessible;
+    }
+
+    public void setAccessible(Boolean accessible) {
+        this.accessible = accessible;
+    }*/
 
     public Integer getWeight(){
         String [] deplacements = deplacement.split("\\+");

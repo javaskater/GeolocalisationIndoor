@@ -51,8 +51,9 @@ public class InitDatabaseAndScreen {
                                     JSONObject obj = sallesArray.getJSONObject(i);
                                     Integer idSalle = obj.getInt("_id");
                                     String nomSalle = obj.getString("numero_salle");
+                                    Boolean accessible = obj.getBoolean("accessible");
                                     Log.i(TAG, "on insère salle de _id:" + idSalle + " et de nom:" + nomSalle);
-                                    mFireBaseDAO.insererSalle(idSalle, nomSalle);
+                                    mFireBaseDAO.insererSalle(idSalle, nomSalle, accessible);
 
                                 } catch (JSONException e) {
                                     Log.w(TAG, "erreur de parsing de l'élément salle " + i + " cause:" + e.getMessage());
@@ -71,8 +72,9 @@ public class InitDatabaseAndScreen {
                                     Integer from = obj.getInt("de");
                                     Integer to = obj.getInt("a");
                                     String mouvement = obj.getString("mouvement");
+                                    Boolean accessible = obj.getBoolean("accessible");
                                     Log.i(TAG, "Insertion du mouvement: On va de (id):" + from + " vers (id):" + to + " via le déplacement:" + mouvement);
-                                    mFireBaseDAO.insererMouvement(from, to, mouvement);
+                                    mFireBaseDAO.insererMouvement(from, to, mouvement,accessible);
                                 } catch (JSONException e) {
                                     Log.w(TAG, "erreur de parsing de l'élément mouvement " + i + " cause:" + e.getMessage());
                                     continue;

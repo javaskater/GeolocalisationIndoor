@@ -8,6 +8,7 @@ public class Mouvement {
     private Integer idTo; //identifiant de la salle d'arrivee
     private Salle salleTo; // la salle d'arrivee
     private String deplacement; //description du déplacement
+    private Boolean accessible;
 
     public Integer getIdFrom() {
         return idFrom;
@@ -47,6 +48,14 @@ public class Mouvement {
 
     public void setDeplacement(String deplacement) {
         this.deplacement = deplacement;
+    }
+
+    public Boolean getAccessible() {
+        return accessible;
+    }
+
+    public void setAccessible(Boolean accessible) {
+        this.accessible = accessible;
     }
 
     public Integer getWeight(){

@@ -92,27 +92,7 @@ public class SallesActivity extends AppCompatActivity {
         });
     }
     public void lancerCalcul(View v){
-        /*mGraphe = GraphDAO.getInstance(this).genererGraphe();
-        mIdLieuDepart = initDatabaseAndScreen.getIdLieuDepart();
-        mIdLieuArrivee = initDatabaseAndScreen.getIdLieuArrivee();
-        mGraphe = SearchAlgorithms.getInstance().calculateShortestPathFromSource(mGraphe, new Integer(new Long(mIdLieuDepart).intValue()));
-        // afficher le chemin optimum de mIdLieuDart à mIdLieuArrivee
-        List<Salle> listePlusCourtChemin = GraphDAO.getInstance(this).retournePlusCourtChemin(mGraphe, new Long(mIdLieuArrivee).intValue());
-        //Création de l'objet Serializable à passer à lactivité de Visualisation
-        PlusCourtChemin plusCourtChemin = new PlusCourtChemin(listePlusCourtChemin);
-        //visualisation du plus court chemin dans la console Logcat
-        for(String parcoursElement:plusCourtChemin.toStringsForLogCat()){
-            Log.i(TAG, parcoursElement);
-        }*/
-        /*
-        * passage par un objet simplifié de parcours optimal
-        * but c'est qu'il soit Serializable
-         */
-        /*SerializablePlusCourtChemin serializablePlusCourtChemin = plusCourtChemin.prepareSerialisation();
-        Intent intentViewCourse = new Intent(this, ViewCourseActivity.class);
-        intentViewCourse.putExtra(CHEMINOPTIMAL, serializablePlusCourtChemin);
-        startActivity(intentViewCourse);*/
-        //Finalement on décide de consacrer un service au calcul du parcours
+
         mIdLieuDepart = initDatabaseAndScreen.getIdLieuDepart();
         mIdLieuArrivee = initDatabaseAndScreen.getIdLieuArrivee();
 

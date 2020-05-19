@@ -26,12 +26,12 @@ public class FireBaseDAO {
         this.mLocalisationDatabase.viderTable(LocalisationDatabase.TABLE_DEPLACEMENTS);
     }
 
-    public long insererSalle(Integer salleId, String nomSalle){
-        return this.mLocalisationDatabase.insererSalle(salleId, nomSalle);
+    public long insererSalle(Integer salleId, String nomSalle, Boolean accessible){
+        return this.mLocalisationDatabase.insererSalle(salleId, nomSalle, accessible);
     }
 
-    public long insererMouvement(Integer from, Integer to, String mouvement){
-        return this.mLocalisationDatabase.insererMouvement(from, to, mouvement);
+    public long insererMouvement(Integer from, Integer to, String mouvement, Boolean accessible){
+        return this.mLocalisationDatabase.insererMouvement(from, to, mouvement, accessible);
     }
 
     public Cursor getLieuxDepartList(){

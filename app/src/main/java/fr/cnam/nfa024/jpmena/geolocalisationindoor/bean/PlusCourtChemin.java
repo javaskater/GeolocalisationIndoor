@@ -52,7 +52,7 @@ public class PlusCourtChemin implements Serializable {
         List<SerializableSalle> salles = serializablePlusCourtChemin.getmSalles();
         for(int i =0; i < mCheminOptimal.size(); i++){
             Salle salleEnCours = mCheminOptimal.get(i);
-            SerializableSalle serializableSalle = new SerializableSalle(salleEnCours.getIdentifiant(), salleEnCours.getName());
+            SerializableSalle serializableSalle = new SerializableSalle(salleEnCours.getIdentifiant(), salleEnCours.getName()/*, salleEnCours.getAccessible()*/);
             salles.add(serializableSalle);
             if (i < mCheminOptimal.size() - 1){
                 Salle sallesuivante =  mCheminOptimal.get(i+1);

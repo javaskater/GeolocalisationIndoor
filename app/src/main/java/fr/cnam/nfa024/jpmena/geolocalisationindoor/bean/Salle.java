@@ -18,6 +18,8 @@ public class Salle {
 
     private Integer distance = Integer.MAX_VALUE;
 
+    private Boolean accessible;
+
     Map<Salle, Mouvement> adjacentSalles = new HashMap<>();
 
     public void addDestination(Salle destination, Mouvement mouvement) {
@@ -27,6 +29,13 @@ public class Salle {
     public Salle(Integer id, String name) {
         this.name = name;
         this.identifiant = id;
+        this.accessible = new Boolean(true);
+    }
+
+    public Salle(Integer id, String name, Boolean accessible) {
+        this.name = name;
+        this.identifiant = id;
+        this.accessible = accessible;
     }
 
     public String getName() {
@@ -67,5 +76,13 @@ public class Salle {
 
     public void setAdjacentSalles(Map<Salle, Mouvement> adjacentSalles) {
         this.adjacentSalles = adjacentSalles;
+    }
+
+    public Boolean getAccessible() {
+        return accessible;
+    }
+
+    public void setAccessible(Boolean accessible) {
+        this.accessible = accessible;
     }
 }

@@ -92,3 +92,9 @@ IntentService[ParcoursOptimalService]
 * Notification OK [cf. ce lien](https://openclassrooms.com/fr/courses/2023346-creez-des-applications-pour-android/2027704-les-services#/id/r-2033586) complété par [ce post StackOverflow](https://stackoverflow.com/questions/32345768/cannot-resolve-method-setlatesteventinfo)
 * TODO problème l'icone de Map ne s'affiche que quand on ouvre la barre de notification....
 * TODO avoir une icône sur la barre ...
+
+# 18/05/2020
+
+* J'ai à résoudre cette difficulté [Post Stackoverflow](https://stackoverflow.com/questions/61874377/pending-intent-does-not-fire)
+  * Le click sur l'icone ne fait plus rien (Emulateur API 19)
+  * Pas d'icône de notification sur mon XIAOMI 
