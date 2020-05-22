@@ -1,13 +1,17 @@
 package fr.cnam.nfa024.jpmena.geolocalisationindoor.service;
 
+import android.annotation.TargetApi;
 import android.app.IntentService;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.util.List;
@@ -34,13 +38,17 @@ public class ParcoursOptimalService extends IntentService {
 
     public final static String CHEMINOPTIMAL = "CheminOptimal";
 
+    public final static String TAG_INTENT = "NotificationClicked";
+
+    private final static String GEOLOCALISATION_CHANNEL_ID = "GeoLocalisation";
+
     private NotificationManager mNotificationsManager;
 
     public ParcoursOptimalService() {
         super("ParcoursOptimalService");
     }
 
-
+    @TargetApi(Build.VERSION_CODES.O) //a du code pour une api au delà de 26
     @Override
     protected void onHandleIntent(Intent intent) {//methode appelée en arrière plan
         if (intent != null) {
@@ -49,18 +57,29 @@ public class ParcoursOptimalService extends IntentService {
 
             long idLieuDepart = (Long)intent.getLongExtra(SallesActivity.IDLIEUDEPART, -1);
             long idLieuArrrivee = (Long)intent.getLongExtra(SallesActivity.IDLIEUARRIVEE, -1);
-
+            //Le calcul réalisé en arrière plan par notre
             SerializablePlusCourtChemin serializablePlusCourtChemin = lancerCalcul(idLieuDepart, idLieuArrrivee);
             //création d'une notification cf. https://stackoverflow.com/questions/32345768/cannot-resolve-method-setlatesteventinfo
             // Le premier titre affiché
             CharSequence tickerText = "Parcours disponible";
-
+            //Implicit Intent to acccess the ViewCourseActivity
             Intent intentViewCourse = new Intent(this, ViewCourseActivity.class);
             intentViewCourse.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //Pour lui permettre de démarrer une activité
             intentViewCourse.putExtra(CHEMINOPTIMAL, serializablePlusCourtChemin);
             PendingIntent pendingIntent = PendingIntent.getActivity(this,0, intentViewCourse, 0);
 
-            Notification.Builder builder = new Notification.Builder(this);
+            mNotificationsManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            NotificationCompat.Builder builder = null;
+            if (Integer.valueOf(android.os.Build.VERSION.SDK) >= Build.VERSION_CODES.O){ //A partir de l'API 26 on doit définir un channel pour notre notification
+                NotificationChannel followersChannel = new NotificationChannel(GEOLOCALISATION_CHANNEL_ID, "Followers", NotificationManager.IMPORTANCE_DEFAULT);
+                followersChannel.setDescription("le canal de mes applications");
+                followersChannel.setImportance(NotificationManager.IMPORTANCE_HIGH);
+                mNotificationsManager.createNotificationChannel(followersChannel); // Le notofocationSystemService crée le canal
+                builder = new NotificationCompat.Builder(this, GEOLOCALISATION_CHANNEL_ID); //Le notification Builder passera toujours par ce canal
+            } else { //cas de laPI 19
+                builder = new NotificationCompat.Builder(this);
+                builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+            }
 
             builder.setAutoCancel(false);
             builder.setTicker(tickerText);

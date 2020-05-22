@@ -19,7 +19,12 @@
         <activity android:name=".EtapeActivity" />
         <activity
             android:name=".ViewCourseActivity"
-            android:label="@string/title_activity_view_course" />
+            android:label="@string/title_activity_view_course">
+            <intent-filter>
+                <action android:name="NotificationClicked" >
+                </action>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".SallesActivity"
             android:label="choix des salles de départ et d&apos;arrivée" />
