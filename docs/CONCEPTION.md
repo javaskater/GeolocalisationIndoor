@@ -241,3 +241,22 @@ root@generic_x86:/data/data/fr.cnam.nfa024.jpmena.geolocalisationindoor/database
 jpmena@jpmena-P34:~/AndroidStudioProjects/GeolocalisationIndoor$ adb pull /data/data/fr.cnam.nfa024.jpmena.geolocalisationindoor/databases/GeolocalisationCNAM.db .
 /data/data/fr.cnam.nfa024.jpmena.geolocalisationindoor/databases/GeolocalisationCNAM.db: 1 file pulled. 3.6 MB/s (20480 bytes in 0.005s)
 ```
+
+# passage de du choix du parcours à sa visualisation
+
+## le service de détermination du parcours
+
+* SallesActivity démarre le service ParcoursOptimalService choisi pour implémenter une méthode de traitement en arrière plan.
+* Une fois le calcul du parcours optimal obtenu, ce dernier lance une notification
+
+### Les notifications
+
+* je me suis appuyé sur  [la réponse 84 a cette question StackOverflow](https://stackoverflow.com/questions/32345768/cannot-resolve-method-setlatesteventinfo)
+* Or à partir de l'API 26 (Oreo) toute notification doit être associée à un canal channel cela a été [l'objet de la réponse à ma question StackOverflow](https://stackoverflow.com/questions/61931503/why-a-pending-intent-does-not-start-an-activity-when-called-form-a-services-not/61933204?noredirect=1#comment109544710_61933204)
+* cela est expliqué également sur [cette vidéo des android developpers](https://developer.android.com/training/notify-user/channels)
+* à la notification est asssocié un pending intent
+* quand on ouvre la barre de notification et que l'on clique sur le large icon, le intent du pending intent est lancé
+  * il démarre la ViewCourseActivity
+  * en transportant le parccoursOptimisé (bundle putExtra)
+
+## La ViewCourse Activity
