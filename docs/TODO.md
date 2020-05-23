@@ -103,3 +103,5 @@ IntentService[ParcoursOptimalService]
 
 * EtapeActivity et MouvementActivity doivent connaître l'indice de l'étape du mouvement
 fait pour retourner dans l'écran principal avec cette valeur ?
+* C'est possible avec un [StartActivityForResult](https://stackoverflow.com/questions/40372240/bundles-or-putextra-when-executing-finish)
+* TODO : une ListView with chekboxes ? [SO](https://stackoverflow.com/questions/8060514/android-listview-with-check-boxes/8060732#8060732)

@@ -20,11 +20,13 @@ import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializableSalle;
 
 public class ViewCourseActivity extends AppCompatActivity {
 
-    private static String TAG = "ViewCourseActivity";
-    public static String ETAPE = "Etape";
+    private final static String TAG = "ViewCourseActivity";
+    public final static String ETAPE = "Etape";
+    public static String INDICE_ETAPE = "indiceEtape";
+    public static Integer REQUEST_CODE = new Integer(2);
     private SerializablePlusCourtChemin mPlusCourtChemin;
     private LinearLayout mMainLinearLayout;
-    private Integer mNumeroEatapeRealise;
+    private Integer mNumeroEtapeRealise;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +88,8 @@ public class ViewCourseActivity extends AppCompatActivity {
                     Toast.makeText(ViewCourseActivity.this, "etape :"+ (index + 1) + " sélectionnée", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(ViewCourseActivity.this,EtapeActivity.class);
                     intent.putExtra(ETAPE, etape);
-                    startActivity(intent);
+                    intent.putExtra(INDICE_ETAPE, index);
+                    startActivityForResult(intent, ViewCourseActivity.REQUEST_CODE);
                 }
             });
             textLinearLayout.addView(button);
@@ -149,6 +152,19 @@ public class ViewCourseActivity extends AppCompatActivity {
         setTextViewAttributes(textViewMessage);
         textViewMessage.setTextColor(Color.RED);
         mMainLinearLayout.addView(textViewMessage);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode == REQUEST_CODE)
+        {
+            mNumeroEtapeRealise = data.getIntExtra(INDICE_ETAPE,0);
+            Toast.makeText(this, "Etape numéro "+ (mNumeroEtapeRealise.intValue() + 1) + " réalisée", Toast.LENGTH_LONG).show();
+            //TODO mettre des coches après les étapes réalisées
+        }
     }
 
 }

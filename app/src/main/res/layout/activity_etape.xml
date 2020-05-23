@@ -7,4 +7,10 @@
     android:orientation="vertical"
     android:id="@+id/mainEtapelayout">
 
+    <Button
+        android:id="@+id/boutonConfirmation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FAIT/OK" />
+
 </LinearLayout>

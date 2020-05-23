@@ -25,14 +25,19 @@ public class EtapeActivity extends AppCompatActivity {
     private String[] mDeplacementsUnitaires;
     private LinearLayout mEtapeLinearLayout;
 
+    private Button mOkFait;
+
     public static final String MOUVEMENT = "Mouvement";
     public static final String INDICE = "Indice";
+
+    private Integer mIndiceEtapeDansParcours;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
         HashMap<String,Object> etape = (HashMap<String,Object>) bundle.getSerializable(ViewCourseActivity.ETAPE);
+        mIndiceEtapeDansParcours = (Integer)bundle.getSerializable(ViewCourseActivity.INDICE_ETAPE);
         mSalleFrom = (SerializableSalle) etape.get(SerializablePlusCourtChemin.FROM);
         mSalleTo = (SerializableSalle) etape.get(SerializablePlusCourtChemin.TO);
         setContentView(R.layout.activity_etape);
@@ -46,6 +51,18 @@ public class EtapeActivity extends AppCompatActivity {
         for (int i = 0; i < mDeplacementsUnitaires.length; i++){
             addLine(i);
         }
+
+        mOkFait = (Button) findViewById(R.id.boutonConfirmation);
+        mOkFait.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //TODO on retourne le numéro d'étape cf. https://stackoverflow.com/questions/40372240/bundles-or-putextra-when-executing-finish
+                Intent i = new Intent();
+                i.putExtra(ViewCourseActivity.INDICE_ETAPE, mIndiceEtapeDansParcours);
+                EtapeActivity.this.setResult(ViewCourseActivity.REQUEST_CODE,i);
+                EtapeActivity.this.finish();
+            }
+        });
         /*if (deplacementsUnitaires != null && deplacementsUnitaires.length > 0){
             Intent intent = new Intent(EtapeActivity.this,MouvementActivity.class);
             intent.putExtra(MOUVEMENT, mDeplacementsUnitaires[0]);
