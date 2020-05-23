@@ -30,20 +30,24 @@ public class ViewCourseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_course);
+        mMainLinearLayout = (LinearLayout) findViewById(R.id.mainlinearlayout);
         //On récupère le chemin Optimal de la SallesActivity
         Bundle bundle = getIntent().getExtras();
         mPlusCourtChemin = (SerializablePlusCourtChemin) bundle.getSerializable(SallesActivity.CHEMINOPTIMAL);
-        //visualisation du plus court chemin dans la console Logcat
-        for(String parcoursElement:mPlusCourtChemin.toLogcat()){
-            Log.i(TAG, parcoursElement);
-        }
-        /*Création dynamique des étapes du parcours
-        * en s'appuyant sur https://github.com/uddish/DynamicLayouts/blob/master/app/src/main/java/com/example/uddishverma/dynamiclayoutsexample/MainActivity.java%C2%B2
-         */
-        mMainLinearLayout = (LinearLayout)findViewById(R.id.mainlinearlayout);
+        if (mPlusCourtChemin != null) {
+            //visualisation du plus court chemin dans la console Logcat
+            for (String parcoursElement : mPlusCourtChemin.toLogcat()) {
+                Log.i(TAG, parcoursElement);
+            }
+            /*Création dynamique des étapes du parcours
+             * en s'appuyant sur https://github.com/uddish/DynamicLayouts/blob/master/app/src/main/java/com/example/uddishverma/dynamiclayoutsexample/MainActivity.java%C2%B2
+             */
 
-        for (int i = 0; i < mPlusCourtChemin.getNombreEtapes(); i++){
-            addLine(i);
+            for (int i = 0; i < mPlusCourtChemin.getNombreEtapes(); i++) {
+                addLine(i);
+            }
+        } else { //on n'a pas de chemin entre le départ et l'arrivée en raison des travaux
+            addMessage("Pas de chemin entre le départ et l'arrivée");
         }
     }
 
@@ -134,6 +138,17 @@ public class ViewCourseActivity extends AppCompatActivity {
         params.setMargins(0, convertDpToPixel(10), 0, convertDpToPixel(10));
         lineLayout.setLayoutParams(params);
         mMainLinearLayout.addView(lineLayout);
+    }
+    /*
+    * Le message que l'on affiche quand iil n'y a pas de chemin entre
+    * le départ et l'arrivée
+     */
+    private void addMessage(String texteMessage){
+        TextView textViewMessage = new TextView(this);
+        textViewMessage.setText(texteMessage);
+        setTextViewAttributes(textViewMessage);
+        textViewMessage.setTextColor(Color.RED);
+        mMainLinearLayout.addView(textViewMessage);
     }
 
 }

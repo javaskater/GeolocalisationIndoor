@@ -65,7 +65,7 @@ public class ParcoursOptimalService extends IntentService {
             //Implicit Intent to acccess the ViewCourseActivity
             Intent intentViewCourse = new Intent(this, ViewCourseActivity.class);
             intentViewCourse.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //Pour lui permettre de démarrer une activité
-            intentViewCourse.putExtra(CHEMINOPTIMAL, serializablePlusCourtChemin);
+            intentViewCourse.putExtra(CHEMINOPTIMAL, serializablePlusCourtChemin); //vaut null ssi pas de chemin entre le départ et l'arrivée
             PendingIntent pendingIntent = PendingIntent.getActivity(this,0, intentViewCourse, 0);
 
             mNotificationsManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -107,18 +107,22 @@ public class ParcoursOptimalService extends IntentService {
         graphe = SearchAlgorithms.getInstance().calculateShortestPathFromSource(graphe, new Integer(new Long(idLieuDepart).intValue()));
         // afficher le chemin optimum de mIdLieuDart à mIdLieuArrivee
         List<Salle> listePlusCourtChemin = GraphDAO.getInstance(this).retournePlusCourtChemin(graphe, new Integer(new Long(idLieuArrivee).intValue()));
-        //Création de l'objet Serializable à passer à lactivité de Visualisation
-        PlusCourtChemin plusCourtChemin = new PlusCourtChemin(listePlusCourtChemin);
-        //visualisation du plus court chemin dans la console Logcat
-        for (String parcoursElement : plusCourtChemin.toStringsForLogCat()) {
-            Log.i(TAG, parcoursElement);
-        }
-        /*
-         * passage par un objet simplifié de parcours optimal
-         * but c'est qu'il soit Serializable
-         */
-        SerializablePlusCourtChemin serializablePlusCourtChemin = plusCourtChemin.prepareSerialisation();
+        if (listePlusCourtChemin != null) {
+            //Création de l'objet Serializable à passer à lactivité de Visualisation
+            PlusCourtChemin plusCourtChemin = new PlusCourtChemin(listePlusCourtChemin);
+            //visualisation du plus court chemin dans la console Logcat
+            for (String parcoursElement : plusCourtChemin.toStringsForLogCat()) {
+                Log.i(TAG, parcoursElement);
+            }
+            /*
+             * passage par un objet simplifié de parcours optimal
+             * but c'est qu'il soit Serializable
+             */
+            SerializablePlusCourtChemin serializablePlusCourtChemin = plusCourtChemin.prepareSerialisation();
 
-        return serializablePlusCourtChemin;
+            return serializablePlusCourtChemin;
+        } else { //il n'y a pas de chemin entre le lieu de départ et le lieu d'arrivée
+            return null;
+        }
     }
 }

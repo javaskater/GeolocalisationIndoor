@@ -75,7 +75,7 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
     public Cursor getLieuxArriveeList(long idDepart) {
         SQLiteDatabase db = getReadableDatabase();
         if (db==null) return null;
-        String query = "SELECT _id, " + FIELD_NUMERO_SALLE + " FROM " + TABLE_SALLES + " WHERE _id <> "+idDepart+" ORDER BY _id ASC";
+        String query = "SELECT _id, " + FIELD_NUMERO_SALLE + " FROM " + TABLE_SALLES + " WHERE _id <> "+idDepart+" AND "+ FIELD_ACCESSIBLE+ " = 1 ORDER BY _id ASC";
         return db.rawQuery(query, null);
     }
 
@@ -111,7 +111,8 @@ public class LocalisationDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         List<Mouvement> suivants = new LinkedList<Mouvement>();
         if(db == null) return null;
-        String query = "SELECT "+FIELD_TO+ ","+FIELD_MOUVEMENT+ " FROM " + TABLE_DEPLACEMENTS + " WHERE " +FIELD_FROM+ "="+ idSalle;
+        //on ne prend que les mouvements autorisés (travaux, VIGIPIRATE etc)
+        String query = "SELECT "+FIELD_TO+ ","+FIELD_MOUVEMENT+ " FROM " + TABLE_DEPLACEMENTS + " WHERE " +FIELD_FROM+ "="+ idSalle + " AND "+FIELD_ACCESSIBLE+ "= 1";
         Cursor c = db.rawQuery(query, null);
         if (c != null)
         {

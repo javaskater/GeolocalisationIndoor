@@ -98,3 +98,8 @@ IntentService[ParcoursOptimalService]
 * J'ai à résoudre cette difficulté [Post Stackoverflow](https://stackoverflow.com/questions/61874377/pending-intent-does-not-fire)
   * Le click sur l'icone ne fait plus rien (Emulateur API 19)
   * Pas d'icône de notification sur mon XIAOMI 
+  
+# 23/05/2020
+
+* EtapeActivity et MouvementActivity doivent connaître l'indice de l'étape du mouvement
+fait pour retourner dans l'écran principal avec cette valeur ?

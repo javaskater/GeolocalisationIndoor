@@ -260,3 +260,13 @@ jpmena@jpmena-P34:~/AndroidStudioProjects/GeolocalisationIndoor$ adb pull /data/
   * en transportant le parccoursOptimisé (bundle putExtra)
 
 ## La ViewCourse Activity
+
+* elle doit affficcher le parcours calculé étape par étape.
+* Chaque étape étant le fiat de se rendre d'une pièce à une pièce voisine
+  * une étape peut être simple: une direction à suivre jusqu'à tomber sur la salle en question
+  * une étape peut être complexe: quand les salles adjaccentes sont sur 2 niveauxx différents, direction à suivre pour se rendre sur la cage d'escalier, 
+  monter/descendre (on démarre alors un podomètre) puis on se rend de la cage d'escalier à une salle voisine
+  
+# supprimer les accès au second étage par l'ouest
+* aller sur la [console Firebase avec mon compte gmail](https://console.firebase.google.com/u/0/project/geolocalisation-indoor/database/geolocalisation-indoor/data)
+* rendre à false l'entrée cnamaccess31 mouvement entrée 12 (monter de 1 à 5) mis à false ainsi que l'entrée 14 (monter de 2 à 6 ) mis à false

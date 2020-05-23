@@ -70,8 +70,10 @@ public class GraphDAO {
             List<Salle> plusCourtChemin = destination.getShortestPath();
             if (plusCourtChemin != null && plusCourtChemin.size() > 0) {
                 plusCourtChemin.add(destination);
+                return plusCourtChemin;
+            } else {
+                return null;
             }
-            return plusCourtChemin;
         } else {
             return null;
         }
