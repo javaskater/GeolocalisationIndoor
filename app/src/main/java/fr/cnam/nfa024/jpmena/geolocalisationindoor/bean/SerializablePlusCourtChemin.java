@@ -54,22 +54,34 @@ public class SerializablePlusCourtChemin implements Serializable {
         return liste;
     }
     /*
-    * Accès Etape i
+    * Accès SerializableEtape i
     * pour afficchage des Etapes
      une à une dans la vue */
-    public HashMap<String, Object> extractEtape(Integer indiceEtapeDansChemin){
+    public SerializableEtape extractEtape(Integer indiceEtapeDansChemin){
         if (indiceEtapeDansChemin < this.getmMouvements().size()){
             SerializableMouvement serializableMouvement = this.getmMouvements().get(indiceEtapeDansChemin);
             SerializableSalle salleFrom = findSalle(serializableMouvement.getIdFrom());
             SerializableSalle salleTo = findSalle(serializableMouvement.getIdTo());
-            HashMap<String, Object> extraction = new HashMap<String, Object>();
-            extraction.put(FROM,salleFrom);
-            extraction.put(TO,salleTo);
-            extraction.put(BY,serializableMouvement);
-            return extraction;
+            SerializableEtape serializableEtape = new SerializableEtape();
+            serializableEtape.setmSalleFrom(salleFrom);
+            serializableEtape.setmSalleTo(salleTo);
+            serializableEtape.setmMouvement(serializableMouvement);
+            return serializableEtape;
         }
         return null;
     }
+
+    /* Accès la liste des étapes
+    * pour afficche de la liste des étapes via un custom Array Adpater */
+    public List<SerializableEtape> extractEtapes(){
+        ArrayList<SerializableEtape> lesEtapes = new ArrayList<SerializableEtape>();
+        for (int i = 0; i < this.getmMouvements().size(); i++){
+            lesEtapes.add(extractEtape(i));
+        }
+        return lesEtapes;
+    }
+
+
 
     public int getNombreEtapes(){
         return this.getmMouvements().size();

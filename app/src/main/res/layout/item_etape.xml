@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tvFrom"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="6dp"
+        android:text="Sarah"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tvTo"
+        android:layout_alignBaseline="@+id/tvFrom"
+        android:layout_toRightOf="@+id/tvFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="6dp"
+        android:text="Sarah"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/tvAction"
+        android:layout_alignBaseline="@+id/tvFrom"
+        android:layout_toRightOf="@+id/tvTo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="6dp"
+        android:text="Aller à l'étape!!!"
+        />
+    <CheckBox android:id="@+id/checkbox_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="etape terminée"
+        android:layout_alignBaseline="@+id/tvFrom"
+        android:layout_toRightOf="@+id/tvAction"/>
+
+</RelativeLayout>
