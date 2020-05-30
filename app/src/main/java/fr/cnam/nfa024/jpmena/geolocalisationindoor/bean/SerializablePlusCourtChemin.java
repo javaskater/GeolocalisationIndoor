@@ -2,7 +2,6 @@ package fr.cnam.nfa024.jpmena.geolocalisationindoor.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 /*
  * L'objet Mouvement étant trop intriqué avec
@@ -12,9 +11,8 @@ import java.util.List;
 
 public class SerializablePlusCourtChemin implements Serializable {
 
-    public static final String FROM = "From";
-    public static final String TO = "Ro";
-    public static final String BY= "By";
+    public static final long serialVersionUID = 6330414299656389849L;
+
 
     private List<SerializableSalle> mSalles = new ArrayList<SerializableSalle>();
     private List<SerializableMouvement> mMouvements = new ArrayList<SerializableMouvement>();

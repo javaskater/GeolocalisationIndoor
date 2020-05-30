@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializableEtape;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializableMouvement;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializablePlusCourtChemin;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializableSalle;
@@ -36,12 +37,12 @@ public class EtapeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
-        HashMap<String,Object> etape = (HashMap<String,Object>) bundle.getSerializable(ViewCourseActivity.ETAPE);
+        SerializableEtape etape = (SerializableEtape) bundle.getSerializable(ViewCourseActivity.ETAPE);
         mIndiceEtapeDansParcours = (Integer)bundle.getSerializable(ViewCourseActivity.INDICE_ETAPE);
-        mSalleFrom = (SerializableSalle) etape.get(SerializablePlusCourtChemin.FROM);
-        mSalleTo = (SerializableSalle) etape.get(SerializablePlusCourtChemin.TO);
+        mSalleFrom = (SerializableSalle) etape.getmSalleFrom();
+        mSalleTo = (SerializableSalle) etape.getmSalleTo();
         setContentView(R.layout.activity_etape);
-        mDeplacement = (SerializableMouvement) etape.get(SerializablePlusCourtChemin.BY);
+        mDeplacement = (SerializableMouvement) etape.getmMouvement();
         setTitle("De:"+mSalleFrom.getName()+" vers:"+mSalleTo.getName());
         String deplacement = mDeplacement.getDeplacement();
         //affichage.setText(deplacement);

@@ -20,6 +20,7 @@ import java.util.HashMap;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializableEtape;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializablePlusCourtChemin;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializableSalle;
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.ParcoursOptimalService;
 
 public class ViewCourseActivity extends AppCompatActivity {
 
@@ -39,7 +40,7 @@ public class ViewCourseActivity extends AppCompatActivity {
         mMainRelativeLayout = (RelativeLayout) findViewById(R.id.mainRelativelayout);
         //On récupère le chemin Optimal de la SallesActivity
         Bundle bundle = getIntent().getExtras();
-        mPlusCourtChemin = (SerializablePlusCourtChemin) bundle.getSerializable(SallesActivity.CHEMINOPTIMAL);
+        mPlusCourtChemin = (SerializablePlusCourtChemin) bundle.getSerializable(ParcoursOptimalService.CHEMINOPTIMAL);
         if (mPlusCourtChemin != null) {
             //visualisation du plus court chemin dans la console Logcat
             for (String parcoursElement : mPlusCourtChemin.toLogcat()) {
