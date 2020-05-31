@@ -1,6 +1,7 @@
 package fr.cnam.nfa024.jpmena.geolocalisationindoor;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -13,6 +14,8 @@ import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializableDeplacement;
 
 public class MouvementActivity extends AppCompatActivity {
 
@@ -30,7 +33,7 @@ public class MouvementActivity extends AppCompatActivity {
     private float mLastDirectionInDegrees = 0f;
     private Sensor mStepCounter;
     private int mNombrePas = 0; //nombre de pas de ce Déplacement unitaire
-    private String mDeplacement; //TODO A remplacer par un POJO qui inclue le nombre de pas ...
+    private SerializableDeplacement mDeplacement; //TODO A remplacer par un POJO qui inclue le nombre de pas ...
     private TextView mCompteurPas;
 
     private Button mOkFait;
@@ -72,13 +75,14 @@ public class MouvementActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_mouvement_boussole);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        Bundle bundle = getIntent().getExtras();
-        mDeplacement = bundle.getString(EtapeActivity.MOUVEMENT);
-        if(mDeplacement.equalsIgnoreCase("MONTER") || mDeplacement.equalsIgnoreCase("DESCENDRE")) {
-            setTitle(mDeplacement+" d'un niveau");
+        Intent intent = getIntent();
+        mDeplacement = (SerializableDeplacement) intent.getSerializableExtra(EtapeActivity.MOUVEMENT);
+        String deplacementAction = mDeplacement.getmDeplacement();
+        if(deplacementAction.equalsIgnoreCase("MONTER") || deplacementAction.equalsIgnoreCase("DESCENDRE")) {
+            setTitle(deplacementAction+" d'un niveau");
             setContentView(R.layout.activity_mouvement_etage);
             ImageView imageView = (ImageView) findViewById(R.id.imageViewStairs);
-            if (mDeplacement.equalsIgnoreCase("MONTER")){
+            if (deplacementAction.equalsIgnoreCase("MONTER")){
                 imageView.setImageResource(R.drawable.manclimbingstair);
             }else {
                 //on descend
@@ -97,13 +101,13 @@ public class MouvementActivity extends AppCompatActivity {
             * Cette image reprend celle trouvée sur https://pixabay.com/en/geography-map-compass-rose-plot-42608/
             * on lui a rajouté par Gimp une flèche en jaune vers la direction souhaitée
              */
-            if(mDeplacement.equalsIgnoreCase(NORD)){
+            if(deplacementAction.equalsIgnoreCase(NORD)){
                 mImageViewCompass.setImageResource(R.drawable.compassn);
-            } else if (mDeplacement.equalsIgnoreCase(SUD)){
+            } else if (deplacementAction.equalsIgnoreCase(SUD)){
                 mImageViewCompass.setImageResource(R.drawable.compasss);
-            } else if (mDeplacement.equalsIgnoreCase(EST)) {
+            } else if (deplacementAction.equalsIgnoreCase(EST)) {
                 mImageViewCompass.setImageResource(R.drawable.compasse);
-            } else if (mDeplacement.equalsIgnoreCase(OUEST)) {
+            } else if (deplacementAction.equalsIgnoreCase(OUEST)) {
                 mImageViewCompass.setImageResource(R.drawable.compasso);
             }
             mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
@@ -114,6 +118,9 @@ public class MouvementActivity extends AppCompatActivity {
         mOkFait.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
+                Intent i = new Intent();
+                i.putExtra(EtapeActivity.MOUVEMENT, mDeplacement);
+                MouvementActivity.this.setResult(EtapeActivity.REQUEST_CODE,i);
                 MouvementActivity.this.finish();
             }
         });
@@ -122,7 +129,8 @@ public class MouvementActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        if (!(mDeplacement.equalsIgnoreCase("MONTER") || mDeplacement.equalsIgnoreCase("DESCENDRE"))) {
+        String deplacementAction = mDeplacement.getmDeplacement();
+        if (!(deplacementAction.equalsIgnoreCase("MONTER") || deplacementAction.equalsIgnoreCase("DESCENDRE"))) {
             mSensorManager.registerListener(mSensorListener, mAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
             mSensorManager.registerListener(mSensorListener, mMagnetometer, SensorManager.SENSOR_DELAY_FASTEST);
         } else {
@@ -133,7 +141,8 @@ public class MouvementActivity extends AppCompatActivity {
     @Override
     public void onPause(){
         super.onPause();
-        if (!(mDeplacement.equalsIgnoreCase("MONTER") || mDeplacement.equalsIgnoreCase("DESCENDRE"))) {
+        String deplacementAction = mDeplacement.getmDeplacement();
+        if (!(deplacementAction.equalsIgnoreCase("MONTER") || deplacementAction.equalsIgnoreCase("DESCENDRE"))) {
             mSensorManager.unregisterListener(mSensorListener);
         }else{
             mSensorManager.unregisterListener(mSensorStepsListener);

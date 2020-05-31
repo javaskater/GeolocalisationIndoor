@@ -9,11 +9,15 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializableDeplacement;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializableEtape;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializableMouvement;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializablePlusCourtChemin;
@@ -23,14 +27,15 @@ public class EtapeActivity extends AppCompatActivity {
     private SerializableSalle mSalleFrom;
     private SerializableSalle mSalleTo;
     private SerializableMouvement mDeplacement;
-    private String[] mDeplacementsUnitaires;
-    private LinearLayout mEtapeLinearLayout;
+    private ArrayList<SerializableDeplacement> mDeplacementsUnitaires;
 
     private Button mOkFait;
 
+    private CustomDeplacementAdapter mAdapter;
+
 
     public static final String MOUVEMENT = "Mouvement";
-    public static final String INDICE = "Indice";
+    public static final int REQUEST_CODE = 3;
 
 
     @Override
@@ -45,12 +50,20 @@ public class EtapeActivity extends AppCompatActivity {
         setTitle("De:"+mSalleFrom.getName()+" vers:"+mSalleTo.getName());
         String deplacement = mDeplacement.getDeplacement();
         //affichage.setText(deplacement);
-        mDeplacementsUnitaires = deplacement.split("\\+");
-        mEtapeLinearLayout = (LinearLayout)findViewById(R.id.mainEtapelayout);
-
-        for (int i = 0; i < mDeplacementsUnitaires.length; i++){
-            addLine(i);
+        String[] deplacementsUnitaires = deplacement.split("\\+");
+        mDeplacementsUnitaires = new ArrayList<SerializableDeplacement>();
+        for (int i = 0; i < deplacementsUnitaires.length; i++){
+            SerializableDeplacement unDeplacement = new SerializableDeplacement();
+            unDeplacement.setmPosition(i+1);
+            unDeplacement.setmFait(new Boolean(false));
+            unDeplacement.setmDeplacement(deplacementsUnitaires[i]);
+            mDeplacementsUnitaires.add(unDeplacement);
         }
+
+        mAdapter = new CustomDeplacementAdapter(this, mDeplacementsUnitaires);
+
+        ListView listView = (ListView) findViewById(R.id.lvDeplacements);
+        listView.setAdapter(mAdapter);
 
         mOkFait = (Button) findViewById(R.id.boutonConfirmation);
         mOkFait.setOnClickListener(new Button.OnClickListener(){
@@ -62,93 +75,28 @@ public class EtapeActivity extends AppCompatActivity {
                 EtapeActivity.this.finish();
             }
         });
-        /*if (deplacementsUnitaires != null && deplacementsUnitaires.length > 0){
-            Intent intent = new Intent(EtapeActivity.this,MouvementActivity.class);
-            intent.putExtra(MOUVEMENT, mDeplacementsUnitaires[0]);
-            startActivity(intent);
-        }*/
     }
 
-    private void addLine(Integer indiceMouvement) {
-        if (indiceMouvement < mDeplacementsUnitaires.length) {
-            final String mouvementUnitaire = mDeplacementsUnitaires[indiceMouvement];
-            //On ajoute un LinearLayout avec une orientation HORIZONTALE
-            LinearLayout textLinearLayout = new LinearLayout(this);
-            textLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
 
-            mEtapeLinearLayout.addView(textLinearLayout);
-
-            TextView textView = new TextView(this);
-            textView.setText(mouvementUnitaire);
-            setTextViewAttributes(textView);
-            textLinearLayout.addView(textView);
-
-
-            Button button = new Button(this);
-            button.setText("Detail Mouvement "+(indiceMouvement+1));
-            ///button.setId(indiceEtape);
-            setButtonAttributes(button);
-            //cf réponse 29 dans https://stackoverflow.com/questions/10673628/implementing-onclicklistener-for-dynamically-created-buttons-in-android
-            final int index = indiceMouvement;
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Button b = (Button)v;
-                    Toast.makeText(EtapeActivity.this, "etape :"+ (index + 1) + " sélectionnée", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(EtapeActivity.this,MouvementActivity.class);
-                    intent.putExtra(MOUVEMENT, mouvementUnitaire);
-                    intent.putExtra(INDICE, index);
-                    startActivity(intent);
+            if (requestCode == REQUEST_CODE ) {
+                SerializableDeplacement returnedDeplacment = (SerializableDeplacement)data.getSerializableExtra(MOUVEMENT);
+                Toast.makeText(this, "Deplacement unitaire no:" +returnedDeplacment.getmPosition()+ " faisant: " +returnedDeplacment.getmDeplacement()+ " realisé avec succès", Toast.LENGTH_LONG).show();
+                for (SerializableDeplacement unMouvement:mDeplacementsUnitaires){
+                    if (unMouvement.equals(returnedDeplacment)){
+                        unMouvement.setmFait(new Boolean(true));
+                        mAdapter.notifyDataSetChanged();
+                        break;
+                    }
                 }
-            });
-            textLinearLayout.addView(button);
+            }
+        } catch (Exception ex) {
+            Toast.makeText(this, ex.toString(),
+                    Toast.LENGTH_SHORT).show();
         }
-        addLineSeperator();
-    }
 
-    private void setTextViewAttributes(TextView textView) {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        params.setMargins(convertDpToPixel(16),
-                convertDpToPixel(16),
-                0, 0
-        );
-
-        textView.setTextColor(Color.BLACK);
-        textView.setLayoutParams(params);
-    }
-
-    private void setButtonAttributes(Button button) {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        params.setMargins(convertDpToPixel(16),
-                convertDpToPixel(16),
-                0, 0
-        );
-
-        button.setTextColor(Color.WHITE);
-        button.setLayoutParams(params);
-    }
-
-    //This function to convert DPs to pixels
-    private int convertDpToPixel(float dp) {
-        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
-        float px = dp * (metrics.densityDpi / 160f);
-        return Math.round(px);
-    }
-
-    private void addLineSeperator() {
-        LinearLayout lineLayout = new LinearLayout(this);
-        lineLayout.setBackgroundColor(Color.GRAY);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                2);
-        params.setMargins(0, convertDpToPixel(10), 0, convertDpToPixel(10));
-        lineLayout.setLayoutParams(params);
-        mEtapeLinearLayout.addView(lineLayout);
     }
 }
