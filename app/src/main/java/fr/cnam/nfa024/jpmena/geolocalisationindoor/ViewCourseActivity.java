@@ -15,7 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializableEtape;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializablePlusCourtChemin;
@@ -26,12 +28,11 @@ public class ViewCourseActivity extends AppCompatActivity {
 
     private final static String TAG = "ViewCourseActivity";
     public final static String ETAPE = "SerializableEtape";
-    public static String INDICE_ETAPE = "indiceEtape";
     public static Integer REQUEST_CODE = new Integer(2);
     private SerializablePlusCourtChemin mPlusCourtChemin;
     private RelativeLayout mMainRelativeLayout;
-    private Integer mNumeroEtapeRealise;
     private CustomEtapeAdapter mEtapeAdapter;
+    private List<SerializableEtape> mArrayOfEtapes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +51,9 @@ public class ViewCourseActivity extends AppCompatActivity {
             * Mise en place d'une ListView avecc un custom Adpater pour afficher les étapes du parcours
             * cf. https://github.com/javaskater/SuiviPArcours
             */
+            mArrayOfEtapes = mPlusCourtChemin.extractEtapes();
 
-            mEtapeAdapter = new CustomEtapeAdapter(this, mPlusCourtChemin.extractEtapes());
+            mEtapeAdapter = new CustomEtapeAdapter(this, mArrayOfEtapes);
             // Attach the adapter to a ListView
             ListView listView = (ListView) findViewById(R.id.lvEtapes);
             listView.setAdapter(mEtapeAdapter);
@@ -103,7 +105,7 @@ public class ViewCourseActivity extends AppCompatActivity {
             if (requestCode == REQUEST_CODE ) {
                 SerializableEtape returnedEtape = (SerializableEtape)data.getSerializableExtra(ETAPE);
                 Toast.makeText(this, "Etape de " +returnedEtape.getmSalleFrom().getName()+ " à " +returnedEtape.getmSalleTo().getName()+ " réalisée avec succcès", Toast.LENGTH_LONG).show();
-                for (SerializableEtape uneEtape:mPlusCourtChemin.extractEtapes()){
+                for (SerializableEtape uneEtape:mArrayOfEtapes){
                     if (uneEtape.equals(returnedEtape)){
                         uneEtape.setmEtapeTerminee(new Boolean(true));
                         mEtapeAdapter.notifyDataSetChanged();

@@ -38,7 +38,7 @@ public class CustomEtapeAdapter extends ArrayAdapter<SerializableEtape> {
         final TextView tvFrom = (TextView) convertView.findViewById(R.id.tvFrom);
         final TextView tvTo = (TextView) convertView.findViewById(R.id.tvTo);
 
-        final CheckBox cbDone = (CheckBox) convertView.findViewById(R.id.checkbox_done);
+        CheckBox cbDone = (CheckBox) convertView.findViewById(R.id.checkbox_done);
         cbDone.setChecked(etape.getmEtapeTerminee());
         // Populate the data into the template view using the data object
         //Do note populate with an Integer setText takes String

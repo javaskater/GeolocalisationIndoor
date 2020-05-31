@@ -28,17 +28,16 @@ public class EtapeActivity extends AppCompatActivity {
 
     private Button mOkFait;
 
+
     public static final String MOUVEMENT = "Mouvement";
     public static final String INDICE = "Indice";
 
-    private Integer mIndiceEtapeDansParcours;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
-        SerializableEtape etape = (SerializableEtape) bundle.getSerializable(ViewCourseActivity.ETAPE);
-        mIndiceEtapeDansParcours = (Integer)bundle.getSerializable(ViewCourseActivity.INDICE_ETAPE);
+        final SerializableEtape etape = (SerializableEtape) bundle.getSerializable(ViewCourseActivity.ETAPE);
         mSalleFrom = (SerializableSalle) etape.getmSalleFrom();
         mSalleTo = (SerializableSalle) etape.getmSalleTo();
         setContentView(R.layout.activity_etape);
@@ -57,9 +56,8 @@ public class EtapeActivity extends AppCompatActivity {
         mOkFait.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
-                //TODO on retourne le numéro d'étape cf. https://stackoverflow.com/questions/40372240/bundles-or-putextra-when-executing-finish
                 Intent i = new Intent();
-                i.putExtra(ViewCourseActivity.INDICE_ETAPE, mIndiceEtapeDansParcours);
+                i.putExtra(ViewCourseActivity.ETAPE, etape);
                 EtapeActivity.this.setResult(ViewCourseActivity.REQUEST_CODE,i);
                 EtapeActivity.this.finish();
             }

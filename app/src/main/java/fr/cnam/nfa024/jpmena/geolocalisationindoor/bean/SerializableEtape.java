@@ -35,6 +35,8 @@ public class SerializableEtape implements Serializable {
     }
 
     public Boolean getmEtapeTerminee() {
+        if (mEtapeTerminee == null)
+            mEtapeTerminee = new Boolean(false);
         return mEtapeTerminee;
     }
 
