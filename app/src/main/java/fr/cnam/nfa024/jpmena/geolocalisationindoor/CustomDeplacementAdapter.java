@@ -14,12 +14,10 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Mouvement;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializableDeplacement;
 
 public class CustomDeplacementAdapter extends ArrayAdapter<SerializableDeplacement> {
 
-    private final static String DEPLACEMENT = "Deplacement";
     private final static int REQUEST_CODE = 3;
 
     public CustomDeplacementAdapter(Context context, List<SerializableDeplacement> lesDeplacments) {
@@ -53,8 +51,8 @@ public class CustomDeplacementAdapter extends ArrayAdapter<SerializableDeplaceme
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Mouvemment:"+tvDeplacement.getText().toString(), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getContext(), Mouvement.class);
-                intent.putExtra(DEPLACEMENT, deplacement); //step must be serializable
+                Intent intent = new Intent(getContext(), MouvementActivity.class);
+                intent.putExtra(EtapeActivity.MOUVEMENT, deplacement); //step must be serializable
                 ((Activity)getContext()).startActivityForResult(intent, REQUEST_CODE); //thanks to answer 62 of https://stackoverflow.com/questions/2848775/use-startactivityforresult-from-non-activity
             }
         });
