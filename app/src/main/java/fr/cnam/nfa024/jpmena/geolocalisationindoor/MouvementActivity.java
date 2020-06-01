@@ -92,7 +92,7 @@ public class MouvementActivity extends AppCompatActivity {
             mStepCounter = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
 
         } else {
-            setTitle("se diriger vers le "+ mDeplacement);
+            setTitle("se diriger vers le "+ deplacementAction);
             setContentView(R.layout.activity_mouvement_boussole);
             mImageViewCompass = (ImageView) findViewById(R.id.imageViewCompass);
             /*
