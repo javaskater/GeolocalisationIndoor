@@ -17,14 +17,9 @@ import android.widget.Toast;
 import java.util.List;
 
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Graph;
-import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.PlusCourtChemin;
-import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.Salle;
-import fr.cnam.nfa024.jpmena.geolocalisationindoor.bean.SerializablePlusCourtChemin;
-import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.GraphDAO;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.dao.LocalisationDatabase;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.InitDatabaseAndScreen;
 import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.ParcoursOptimalService;
-import fr.cnam.nfa024.jpmena.geolocalisationindoor.service.SearchAlgorithms;
 
 public class SallesActivity extends AppCompatActivity {
 
@@ -69,6 +64,9 @@ public class SallesActivity extends AppCompatActivity {
         ///initiliser les données en base à partir de Firebase
         //TODO problème il recharge les donnée à chaque fois que onCreate est appelé typiqurment quand on passe du mode
         //portrait au mode paiysage
+        if (mDB == null){
+            mDB = new LocalisationDatabase(this);
+        }
         mLieuDepart = (Spinner) findViewById(R.id.lieuDeDepart);
         mLieuArrivee = (Spinner) findViewById(R.id.lieuDeArrivee);
         initDatabaseAndScreen = new InitDatabaseAndScreen(this);

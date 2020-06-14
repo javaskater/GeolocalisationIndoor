@@ -84,14 +84,14 @@ public class ParcoursOptimalService extends IntentService {
             builder.setAutoCancel(false);
             builder.setTicker(tickerText);
             builder.setContentTitle("Parcours");
-            builder.setContentText("Le Pacours est disponible");
+            builder.setContentText("Le Parcours est disponible");
             builder.setSmallIcon(R.drawable.explore);
             Bitmap large_icon_bmp = BitmapFactory.decodeResource(this.getResources(),
                     R.drawable.ic_action_map);
             builder.setLargeIcon(large_icon_bmp);
             builder.setContentIntent(pendingIntent);
             builder.setOngoing(true);
-            builder.setSubText("Accédez au pacrous en cliquant sur cette icône");   //API level 16
+            builder.setSubText("Accédez au parcours en cliquant sur cette icône");   //API level 16
             builder.setNumber(5000); //durée d'apparition de l'icone dans la barre de notifications ?
             builder.build();
 
