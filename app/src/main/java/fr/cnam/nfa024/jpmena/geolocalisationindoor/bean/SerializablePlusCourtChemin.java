@@ -11,8 +11,7 @@ import java.util.List;
 
 public class SerializablePlusCourtChemin implements Serializable {
 
-    public static final long serialVersionUID = 6330414299656389849L;
-
+    private static final long serialVersionUID = 7785097082547839762L;
 
     private List<SerializableSalle> mSalles = new ArrayList<SerializableSalle>();
     private List<SerializableMouvement> mMouvements = new ArrayList<SerializableMouvement>();
